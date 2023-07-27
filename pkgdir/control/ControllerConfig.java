@@ -56,7 +56,11 @@ public class ControllerConfig implements ActionListener{
 			guiMenul.getMainJPanel().repaint();
 	   	}
 	}
-
+	/**
+     * Metodo que administra los eventos sobre JTabbedPane
+	* pertenece a la clase ChangeListener
+     * @param te
+     */
 	ChangeListener changeListener = new ChangeListener() {
 		public void stateChanged(ChangeEvent te) {
 			JTabbedPane sourceTabbedPane = (JTabbedPane) te.getSource();

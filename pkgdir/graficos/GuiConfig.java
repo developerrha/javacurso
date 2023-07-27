@@ -61,6 +61,10 @@ public class GuiConfig extends JPanel{
 		}
 		return tabbConf;
 	}
+	/**
+	*Metodo que pinta el JPane interno
+	*Retorna JComponent
+	*/
 	private JComponent drawSimpleTabb( JComponent work ) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 1));

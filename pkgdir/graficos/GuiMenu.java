@@ -35,9 +35,7 @@ public class GuiMenu extends JFrame{
 	private JMenuItem itemCommand;
 	private JMenuItem itemEncrypt;
 	private JMenuItem itemConfig;
-	private JButton butReadTxt;
 	private JButton butReadDb;
-	private JButton butWrite;
 	private JButton butDel;
 	private JButton butCommand;
 	private JButton butEncrypt;
@@ -72,7 +70,6 @@ public class GuiMenu extends JFrame{
 			this.setJMenuBar( drawMenuBar() );
 			this.setIconImage( new ImageIcon( GuiMenu.class.getResource( "../../res/img_icon_litle.jpg" ) ).getImage()  );
 			this.setVisible(true);
-			drawPanTxt();
 			drawPanCommand();
 			drawPanEncrypt();
 		}catch(Exception e){
@@ -80,6 +77,7 @@ public class GuiMenu extends JFrame{
 		}
 
 	}
+	
 
 	private JMenuBar drawMenuBar(){
 		menuBar = new JMenuBar();
@@ -103,42 +101,7 @@ public class GuiMenu extends JFrame{
 		menuSet.add( itemConfig );
 		return menuBar;
 	}
-	/**
-	*Metodo que pinta el JButton butWrite Txt
-	*Retorna JButton
-	*/
-	private JButton drawButtonWrite(){
-		try{
-		     URL url = GuiMenu.class.getResource("../../res/write_bl.png");
-		     BufferedImage img = ImageIO.read(url);
-			butWrite = new JButton("Escribir en Archivo",new ImageIcon(img));
-			butWrite.setBackground( new Color( 168, 168, 73, 30 ) );
-			butWrite.setFont(butWrite.getFont().deriveFont(Font.BOLD | Font.ITALIC));
-			butWrite.setAlignmentX(panel.CENTER_ALIGNMENT);
-			butWrite.setFocusPainted(true);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return butWrite;
-	}
-	/**
-	*Metodo que pinta el JButton butReadTxt
-	*Retorna JButton
-	*/
-	private JButton drawButtonReadTxt(){
-		try{
-		     URL url = GuiMenu.class.getResource("../../res/read_bl.png");
-		     BufferedImage img = ImageIO.read(url);
-			butReadTxt = new JButton("Leer Archivo",new ImageIcon(img));
-			butReadTxt.setBackground( new Color( 168, 168, 73, 50 ) );
-			butReadTxt.setFont(butReadTxt.getFont().deriveFont(Font.BOLD | Font.ITALIC));
-			butReadTxt.setAlignmentX(panel.CENTER_ALIGNMENT);
-			butReadTxt.setFocusPainted(true);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return butReadTxt;
-	}
+	
 	/**
 	*Metodo que pinta el JButton butDel
 	*Retorna JButton
@@ -257,35 +220,6 @@ public class GuiMenu extends JFrame{
 	}
 
 	/**
-	*Metodo que pinta el JPanel de Archivo plano
-	*Retorna JPanel
-	*/
-
-	private JPanel drawPanTxt(){
-		try{
-			panelTxt = new JPanel();
-		     panelTxt.setLayout(new BoxLayout(panelTxt,BoxLayout.Y_AXIS));
-			panelTxt.setBackground( new Color( 146, 168, 73 , 30 ) );
-			panelTxt.setPreferredSize(new Dimension(750, 450));
-		     panelTxt.setMaximumSize(new Dimension(750, 450));
-			panelTxt.add(Box.createVerticalStrut(10));
-			panelTxt.add( drawTextfWrite() );
-			panelTxt.add(Box.createVerticalStrut(10));
-			panelTxt.add( drawButtonWrite() );
-			panelTxt.add(Box.createVerticalStrut(10));
-			panelTxt.add( drawButtonReadTxt() );
-			panelTxt.add(Box.createVerticalStrut(10));
-			panelTxt.add(drawAreaRead());
-			panelTxt.add(Box.createVerticalStrut(10));
-			panelTxt.add(drawButtonDel());
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return panelTxt;
-	}
-
-	/**
 	*Metodo que pinta el JPanel de Command
 	*Retorna JPanel
 	*/
@@ -340,8 +274,7 @@ public class GuiMenu extends JFrame{
 		     panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 			panel.setBackground( Color.decode("#80805E") );
 			panel.add(Box.createVerticalStrut(30));
-			//panel.add( drawPanDB() );
-		}catch(Exception e){
+			}catch(Exception e){
 			e.printStackTrace();
 		}
 		return panel;
@@ -399,13 +332,6 @@ public class GuiMenu extends JFrame{
     }
 
 	/**
-     * Devuelve el Txt JPanel
-     * @return
-     */
-    public JPanel getTxtJPanel() {
-        return panelTxt;
-    }
-	/**
      * Devuelve el Command JPanel
      * @return
      */
@@ -420,21 +346,7 @@ public class GuiMenu extends JFrame{
         return panelEncrypt;
     }
 
-	/**
-     * Devuelve el boton leerTxt
-     * @return
-     */
-    public JButton getBotonReadTxt() {
-        return butReadTxt;
-    }
 
-	/**
-     * Devuelve el boton escribir Txt
-     * @return
-     */
-    public JButton getBotonWrite() {
-        return butWrite;
-    }
 	/**
      * Devuelve el boton borrar Txt
      * @return

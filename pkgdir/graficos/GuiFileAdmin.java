@@ -20,9 +20,14 @@ public class GuiFileAdmin extends JPanel{
 	private JFileChooser fileChTxt;
 	private JButton butReadTxt;
 	private JButton butWrite;
+	private JButton butEncript;
+	private JButton butZipFile;
 	private JTextArea areaRead;
 	private JScrollPane scrollRead;
 	private JLabel labFileName;
+	private JList<String> listSelFiles;
+	private JScrollPane scrollSelFiles;
+
 
 
 	/**
@@ -44,13 +49,19 @@ public class GuiFileAdmin extends JPanel{
 			this.add(Box.createVerticalStrut(10));
 			this.add( drawLabelFileName() );
 			this.add(Box.createVerticalStrut(10));
-			this.add( drawButtonReadTxt() );
+			this.add( drawListFiles() );
 			this.add(Box.createVerticalStrut(10));
-			this.add( drawButtonWrite() );
+			this.add( drawButtonReadTxt() );
 			this.add(Box.createVerticalStrut(10));
 			this.add( drawFileChooser() );
 			this.add(Box.createVerticalStrut(10));
 			this.add( drawAreaRead() );
+			this.add(Box.createVerticalStrut(10));
+			this.add( drawButtonWrite() );
+			this.add(Box.createVerticalStrut(10));
+			this.add( drawButtonEncript() );
+			this.add(Box.createVerticalStrut(10));
+			this.add( drawButtonZipFiles() );
 			this.add(Box.createVerticalStrut(10));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -74,6 +85,28 @@ public class GuiFileAdmin extends JPanel{
 		return fileChTxt;
     }
 	/**
+	*Metodo que pinta el JList dentro de un JScrollPane
+	*Retorna JScrollPane
+	*/
+	private JScrollPane drawListFiles(){
+		scrollSelFiles = new JScrollPane();
+		try{
+			listSelFiles = new JList<String>();
+			listSelFiles.setBackground( new Color( 168, 168, 73 ) );
+			scrollSelFiles = new JScrollPane(listSelFiles);
+			listSelFiles.setFont(new Font("Serif", Font.PLAIN, 14));
+			scrollSelFiles.setPreferredSize(new Dimension(550, 260));
+			scrollSelFiles.setMaximumSize(new Dimension(550, 260));
+			scrollSelFiles.getViewport().setOpaque(false);
+			scrollSelFiles.setOpaque(false);
+			scrollSelFiles.setVisible(false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return scrollSelFiles;
+	}
+
+	/**
 	*Metodo que pinta el JLabel labFileName
 	*Retorna JLabel
 	*/
@@ -95,9 +128,9 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonReadTxt(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/read_bl.png");
+		     URL url = GuiMenu.class.getResource("../../res/write_bl.png");
 		     BufferedImage img = ImageIO.read(url);
-			butReadTxt = new JButton("Leer Archivo",new ImageIcon(img));
+			butReadTxt = new JButton("Editar Archivo",new ImageIcon(img));
 			butReadTxt.setBackground( new Color( 168, 168, 73, 50 ) );
 			butReadTxt.setFont(butReadTxt.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			butReadTxt.setAlignmentX(panel.CENTER_ALIGNMENT);
@@ -109,14 +142,14 @@ public class GuiFileAdmin extends JPanel{
 		return butReadTxt;
 	}
 	/**
-	*Metodo que pinta el JButton butWrite Txt
+	*Metodo que pinta el JButton butWrite File
 	*Retorna JButton
 	*/
 	private JButton drawButtonWrite(){
 		try{
 		     URL url = GuiMenu.class.getResource("../../res/write_bl.png");
 		     BufferedImage img = ImageIO.read(url);
-			butWrite = new JButton("Escribir en Archivo",new ImageIcon(img));
+			butWrite = new JButton("Guardar cambios",new ImageIcon(img));
 			butWrite.setBackground( new Color( 168, 168, 73, 30 ) );
 			butWrite.setFont(butWrite.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			butWrite.setAlignmentX(panel.CENTER_ALIGNMENT);
@@ -128,11 +161,49 @@ public class GuiFileAdmin extends JPanel{
 		return butWrite;
 	}
 	/**
+	*Metodo que pinta el JButton butEncript File
+	*Retorna JButton
+	*/
+	private JButton drawButtonEncript(){
+		try{
+		     URL url = GuiMenu.class.getResource("../../res/encrypt_bl.png");
+		     BufferedImage img = ImageIO.read(url);
+			butEncript = new JButton("Encriptar archivo",new ImageIcon(img));
+			butEncript.setBackground( new Color( 168, 168, 73, 30 ) );
+			butEncript.setFont(butEncript.getFont().deriveFont(Font.BOLD | Font.ITALIC));
+			butEncript.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butEncript.setFocusPainted(true);
+			butEncript.setVisible(false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return butEncript;
+	}
+	/**
+	*Metodo que pinta el JButton butZip Files
+	*Retorna JButton
+	*/
+	private JButton drawButtonZipFiles(){
+		try{
+		     URL url = GuiMenu.class.getResource("../../res/encrypt_bl.png");
+		     BufferedImage img = ImageIO.read(url);
+			butZipFile = new JButton("Crear contenedor Zip",new ImageIcon(img));
+			butZipFile.setBackground( new Color( 168, 168, 73, 30 ) );
+			butZipFile.setFont(butZipFile.getFont().deriveFont(Font.BOLD | Font.ITALIC));
+			butZipFile.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butZipFile.setFocusPainted(true);
+			butZipFile.setVisible(false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return butZipFile;
+	}
+	/**
 	*Metodo que pinta el JTextArea dentro de un JScrollPane
 	*Retorna JScrollPane
 	*/
 	private JScrollPane drawAreaRead(){
-		JScrollPane scrollReadL = new JScrollPane();
+		scrollRead = new JScrollPane();
 		try{
 			areaRead = new JTextArea();
 			areaRead.setEditable(false);
@@ -186,7 +257,13 @@ public class GuiFileAdmin extends JPanel{
     public JButton getBotonWrite() {
         return butWrite;
     }
-
+	/**
+     * Devuelve el boton Encriptar archivo
+     * @return
+     */
+    public JButton getBotonEncrypt() {
+        return butEncript;
+    }
 	/**
 	* Devuelve el textarea read
 	* @return
@@ -201,6 +278,27 @@ public class GuiFileAdmin extends JPanel{
 	public JScrollPane getScrollAreaRead( ) {
 		return scrollRead;
 	}
+	/**
+	* Devuelve el JScrollPane files
+	* @return
+	*/
+	public JScrollPane getScrollSelFiles( ) {
+		return scrollSelFiles;
+	}
+	/**
+	* Devuelve el JList Files Selected
+	* @return
+	*/
+	public JList getListSelFiles( ) {
+		return listSelFiles;
+	}
+	/**
+     * Devuelve el boton Crear zip con archivos
+     * @return
+     */
+    public JButton getBotonZipFiles() {
+        return butZipFile;
+    }
 
 
 }

@@ -6,18 +6,24 @@ import pkgdir.graficos.GuiFileAdmin;
 import pkgdir.modelo.FileServices;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.Box;
 import javax.swing.JFileChooser;
 import java.io.File;
+import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
 
 
-public class ControllerFileAdmin implements ActionListener{
+public class ControllerFileAdmin implements ActionListener, ListSelectionListener{
 
 	private GuiMenu guiMenul;
 	public GuiFileAdmin guiFileAdminl;
 	private FileServices fileServices;
+   	private DefaultListModel lst_files_model = new DefaultListModel();
+	private ListSelectionModel listSelectionModel;
 
 	/**
      * Constructor sin parametros
@@ -53,14 +59,31 @@ public class ControllerFileAdmin implements ActionListener{
 			try{
 				if( ae.getActionCommand().equals("ApproveSelection") ){
 					String name_src = ( (JFileChooser)ae.getSource() ).getName();
-					File mp4_file = guiFileAdminl.getFileChooser().getSelectedFile();
-					String n_msource = mp4_file.getParent()+"/"+mp4_file.getName();
-					guiFileAdminl.getLabelFileName().setText( n_msource );
-					guiFileAdminl.getLabelFileName().setVisible(true);				
+					File[] sel_files = guiFileAdminl.getFileChooser().getSelectedFiles();
+					if( sel_files.length == 1){
+						String n_msource = sel_files[0].getParent()+"/"+sel_files[0].getName();
+						guiFileAdminl.getLabelFileName().setText( n_msource );
+						guiFileAdminl.getScrollAreaRead().setVisible(true);				
+						guiFileAdminl.getBotonReadTxt().setVisible(true);				
+						guiFileAdminl.getBotonWrite().setVisible(true);	
+						guiFileAdminl.getBotonEncrypt().setVisible(true);				
+						guiFileAdminl.getBotonZipFiles().setVisible(false);				
+					}else{
+						guiFileAdminl.getLabelFileName().setText( "Lista de seleccion" );
+						for(int i=0;i<sel_files.length;i++){
+							String n_msource = sel_files[i].getParent()+"/"+sel_files[i].getName();
+							lst_files_model.addElement( n_msource );
+						}
+						guiFileAdminl.getListSelFiles( ).setModel( lst_files_model );
+						guiFileAdminl.getScrollSelFiles( ).setVisible(true);
+						guiFileAdminl.getScrollAreaRead().setVisible(false);				
+						guiFileAdminl.getBotonReadTxt().setVisible(false);				
+						guiFileAdminl.getBotonWrite().setVisible(false);				
+						guiFileAdminl.getBotonEncrypt().setVisible(false);				
+						guiFileAdminl.getBotonZipFiles().setVisible(true);				
+					}
+					guiFileAdminl.getLabelFileName().setVisible(true);	
 					guiFileAdminl.getFileChooser().setVisible(false);	
-					guiFileAdminl.getBotonReadTxt().setVisible(true);				
-					guiFileAdminl.getBotonWrite().setVisible(true);				
-					guiFileAdminl.getScrollAreaRead().setVisible(true);				
 					guiMenul.getMainJPanel().revalidate();
 					guiMenul.getMainJPanel().repaint();
 				}else{
@@ -105,7 +128,25 @@ public class ControllerFileAdmin implements ActionListener{
 			guiMenul.getMainJPanel().repaint();
 	   	}
 	}
-	
+	/**
+     * Metodo que administra los eventos sobre JList
+	* pertenece a la clase ListSelectionListener
+     * @param evlist
+     */
+	@Override
+	public void valueChanged(ListSelectionEvent evlist) { 
+		if (!evlist.getValueIsAdjusting()) {
+			int selections[] = guiFileAdminl.getListSelFiles( ).getSelectedIndices();
+		     Object selectionValues[] = guiFileAdminl.getListSelFiles( ).getSelectedValues();
+		     for (int i = 0, n = selections.length; i < n; i++) {
+		       if (i == 0) {
+		         System.out.println(" Selections: ");
+		       }
+		       System.out.println(selections[i] + "  " + selectionValues[i] + " ");
+		     }
+			
+		}
+	}
 	
 	/**
      * Metodo que agrega eventos sobre los componentes de GuiMenu
@@ -115,6 +156,8 @@ public class ControllerFileAdmin implements ActionListener{
 		guiMenul.getItemTxt().addActionListener(this);
 		guiFileAdminl.getFileChooser().addActionListener(this);
 		guiFileAdminl.getBotonReadTxt().addActionListener(this);
+		listSelectionModel = guiFileAdminl.getListSelFiles( ).getSelectionModel();
+		listSelectionModel.addListSelectionListener( this );
 	}
 
 

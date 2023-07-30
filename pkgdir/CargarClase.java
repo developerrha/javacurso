@@ -1,3 +1,9 @@
+/**
+* Aplicacion de escritorio en java
+* Clase main del proyecto
+* @author Homzode
+* @version 1.1.7, 2023/07/30
+*/
 
 package pkgdir;
 
@@ -7,6 +13,12 @@ import pkgdir.graficos.GuiFileAdmin;
 import pkgdir.control.Controller;
 import pkgdir.control.ControllerConfig;
 import pkgdir.control.ControllerFileAdmin;
+/**
+* Aplicacion de escritorio en java
+* Clase main del proyecto
+* @author Homzode
+* @version 1.1.7, 2023/07/30
+*/
 
 public class CargarClase {
 	public static GuiMenu front;
@@ -15,6 +27,8 @@ public class CargarClase {
 
 	/**
 	*Metodo principal de la clase		
+	*@param String[] args
+	*@return void
 	*/
      public static void main(String[] args) {
 		try{

@@ -13,6 +13,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.Box;
 import javax.swing.JFileChooser;
 import java.io.File;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 
@@ -63,10 +64,11 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 					if( sel_files.length == 1){
 						String n_msource = sel_files[0].getParent()+"/"+sel_files[0].getName();
 						guiFileAdminl.getLabelFileName().setText( n_msource );
+						guiFileAdminl.gettextAreaRead().setEditable(true);
 						guiFileAdminl.getScrollAreaRead().setVisible(true);				
 						guiFileAdminl.getBotonReadTxt().setVisible(true);				
-						guiFileAdminl.getBotonWrite().setVisible(true);	
-						guiFileAdminl.getBotonEncrypt().setVisible(true);				
+						guiFileAdminl.getButtonsJPanel().setVisible(true);			
+						guiFileAdminl.getBotonWrite().setEnabled(false);	
 						guiFileAdminl.getBotonZipFiles().setVisible(false);				
 					}else{
 						guiFileAdminl.getLabelFileName().setText( "Lista de seleccion" );
@@ -78,8 +80,7 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 						guiFileAdminl.getScrollSelFiles( ).setVisible(true);
 						guiFileAdminl.getScrollAreaRead().setVisible(false);				
 						guiFileAdminl.getBotonReadTxt().setVisible(false);				
-						guiFileAdminl.getBotonWrite().setVisible(false);				
-						guiFileAdminl.getBotonEncrypt().setVisible(false);				
+						guiFileAdminl.getButtonsJPanel().setVisible(false);					
 						guiFileAdminl.getBotonZipFiles().setVisible(true);				
 					}
 					guiFileAdminl.getLabelFileName().setVisible(true);	
@@ -98,23 +99,33 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 		* Evento sobre boton LeerTxt
 		*/
 		if( ae.getSource() == guiFileAdminl.getBotonReadTxt()){
+			String filePath = guiFileAdminl.getLabelFileName().getText();
 			fileServices = new FileServices();
-			String stmp = fileServices.readFile( "historial.txt" );	
-			(guiFileAdminl.gettextAreaRead()).setText( stmp );	
+			String stmp = fileServices.readFile( filePath );	
+			(guiFileAdminl.gettextAreaRead()).setText( stmp );
+			if( stmp.indexOf("Error:") != 0 && stmp.length() > 10 ){
+				guiFileAdminl.getBotonWrite().setEnabled(true);				
+			}	
 	   	}
 		/*
 		* Evento sobre boton Escribir Txt
 		*/
 		if( ae.getSource() == guiFileAdminl.getBotonWrite()){
+			String filePath = guiFileAdminl.getLabelFileName().getText();
+			String stmp = (guiFileAdminl.gettextAreaRead()).getText();
 			fileServices = new FileServices();
-			//fileServices.writeFile( stmp, "historial.txt" );
+			fileServices.writeFile( stmp, filePath );
 	   	}
 		/*
-		* Evento sobre boton Borrar Txt
+		* Evento sobre boton Cancelar
 		*/
-		if( ae.getSource() == guiMenul.getBotonDel()){
-			fileServices = new FileServices();
-//			fileServices.delText( "historial.txt", stmpg);
+		if( ae.getSource() == guiFileAdminl.getBotonCancel()){
+			guiFileAdminl.getFileJPanel().removeAll();
+			guiFileAdminl.showPanel();
+			agregarEventos();
+			guiMenul.getMainJPanel().revalidate();
+			guiMenul.getMainJPanel().repaint();
+
 	   	}
 
 		/*
@@ -137,14 +148,13 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 	public void valueChanged(ListSelectionEvent evlist) { 
 		if (!evlist.getValueIsAdjusting()) {
 			int selections[] = guiFileAdminl.getListSelFiles( ).getSelectedIndices();
-		     Object selectionValues[] = guiFileAdminl.getListSelFiles( ).getSelectedValues();
+			List<String> selectedTags = guiFileAdminl.getListSelFiles( ).getSelectedValuesList();
 		     for (int i = 0, n = selections.length; i < n; i++) {
 		       if (i == 0) {
 		         System.out.println(" Selections: ");
 		       }
-		       System.out.println(selections[i] + "  " + selectionValues[i] + " ");
+		       System.out.println(selections[i] + "  " + selectedTags.get(i) + " ");
 		     }
-			
 		}
 	}
 	
@@ -156,6 +166,8 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 		guiMenul.getItemTxt().addActionListener(this);
 		guiFileAdminl.getFileChooser().addActionListener(this);
 		guiFileAdminl.getBotonReadTxt().addActionListener(this);
+		guiFileAdminl.getBotonWrite().addActionListener(this);
+		guiFileAdminl.getBotonCancel().addActionListener(this);
 		listSelectionModel = guiFileAdminl.getListSelFiles( ).getSelectionModel();
 		listSelectionModel.addListSelectionListener( this );
 	}

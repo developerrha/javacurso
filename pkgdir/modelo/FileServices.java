@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.nio.file.*;
 
 
 public class FileServices{
@@ -29,13 +30,10 @@ public class FileServices{
      */
 	public void writeFile(String mess, String fileName){
         try {
+		System.out.println("mess: "+mess);
 		textfile = new File(fileName);
-		writer = new FileWriter(textfile, true);
-		if (textfile.length() == 0){
-			writer.append(mess);
-		} else {
-			writer.append("\n"+mess);
-		}
+		writer = new FileWriter(textfile, false);
+		writer.write(mess);
 		writer.flush();
 		writer.close();
         }catch (Exception e){
@@ -59,9 +57,12 @@ public class FileServices{
 				}
 				txtReader.close();
 			}else{
-				data = "No se encontro archivo: "+textfile.getName();
+				data = "Error: No se encontro archivo: "+textfile.getName();
 			}
-			
+			System.out.println("data: "+data.length());	
+			if( data.length() <= 0 ){
+				data = "Error: No es posible editar el archivo\nSi fue encriptado por esta aplicacion\nPruebe con boton Desencriptar";
+			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -17,11 +17,13 @@ import java.awt.Toolkit;
 public class GuiFileAdmin extends JPanel{
 	
 	private JPanel panel;
+	private JPanel jtmpCb;
 	private JFileChooser fileChTxt;
 	private JButton butReadTxt;
 	private JButton butWrite;
 	private JButton butEncript;
 	private JButton butZipFile;
+	private JButton butCancel;
 	private JTextArea areaRead;
 	private JScrollPane scrollRead;
 	private JLabel labFileName;
@@ -57,9 +59,7 @@ public class GuiFileAdmin extends JPanel{
 			this.add(Box.createVerticalStrut(10));
 			this.add( drawAreaRead() );
 			this.add(Box.createVerticalStrut(10));
-			this.add( drawButtonWrite() );
-			this.add(Box.createVerticalStrut(10));
-			this.add( drawButtonEncript() );
+			this.add( drawButtonsFileSave()  );
 			this.add(Box.createVerticalStrut(10));
 			this.add( drawButtonZipFiles() );
 			this.add(Box.createVerticalStrut(10));
@@ -67,6 +67,25 @@ public class GuiFileAdmin extends JPanel{
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	*Metodo que pinta el JPanel botonera
+	*Retorna JPanel
+	*/
+	private JPanel drawButtonsFileSave(){
+		jtmpCb = new JPanel();
+		try{
+			jtmpCb.setLayout(new BoxLayout(jtmpCb,BoxLayout.X_AXIS));			
+			jtmpCb.add(drawButtonWrite());
+			jtmpCb.add(drawButtonEncript());
+			jtmpCb.add(drawButtonCancel());
+			jtmpCb.setVisible(false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return jtmpCb;
+	}
+
 	/**
 	*Metodo que pinta el JFileChooser 
 	*Retorna JFileChooser
@@ -147,14 +166,14 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonWrite(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/write_bl.png");
+		     URL url = GuiMenu.class.getResource("../../res/save_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butWrite = new JButton("Guardar cambios",new ImageIcon(img));
 			butWrite.setBackground( new Color( 168, 168, 73, 30 ) );
 			butWrite.setFont(butWrite.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			butWrite.setAlignmentX(panel.CENTER_ALIGNMENT);
 			butWrite.setFocusPainted(true);
-			butWrite.setVisible(false);
+			//butWrite.setVisible(false);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -173,7 +192,7 @@ public class GuiFileAdmin extends JPanel{
 			butEncript.setFont(butEncript.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			butEncript.setAlignmentX(panel.CENTER_ALIGNMENT);
 			butEncript.setFocusPainted(true);
-			butEncript.setVisible(false);
+			//butEncript.setVisible(false);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -199,6 +218,25 @@ public class GuiFileAdmin extends JPanel{
 		return butZipFile;
 	}
 	/**
+	*Metodo que pinta el JButton butCancel Files
+	*Retorna JButton
+	*/
+	private JButton drawButtonCancel(){
+		try{
+		     URL url = GuiMenu.class.getResource("../../res/cancel_bl.png");
+		     BufferedImage img = ImageIO.read(url);
+			butCancel = new JButton("Cancelar",new ImageIcon(img));
+			butCancel.setBackground( new Color( 168, 168, 73, 30 ) );
+			butCancel.setFont(butCancel.getFont().deriveFont(Font.BOLD | Font.ITALIC));
+			butCancel.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butCancel.setFocusPainted(true);
+//			butCancel.setVisible(false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return butCancel;
+	}
+	/**
 	*Metodo que pinta el JTextArea dentro de un JScrollPane
 	*Retorna JScrollPane
 	*/
@@ -210,8 +248,8 @@ public class GuiFileAdmin extends JPanel{
 			areaRead.setBackground( new Color( 168, 168, 73 ) );
 			scrollRead = new JScrollPane(areaRead);
 			areaRead.setFont(new Font("Serif", Font.PLAIN, 14));
-			scrollRead.setPreferredSize(new Dimension(550, 260));
-			scrollRead.setMaximumSize(new Dimension(550, 260));
+			scrollRead.setPreferredSize(new Dimension(700, 300));
+			scrollRead.setMaximumSize(new Dimension(700, 300));
 			scrollRead.getViewport().setOpaque(false);
 			scrollRead.setOpaque(false);
 			scrollRead.setVisible(false);
@@ -228,6 +266,14 @@ public class GuiFileAdmin extends JPanel{
     public JPanel getFileJPanel() {
         return this;
     }
+	/**
+     * Devuelve el Botones salvar JPanel
+     * @return Jpanel
+     */
+    public JPanel getButtonsJPanel() {
+        return jtmpCb;
+    }
+
 	/**
      * Devuelve el JFileChooser JPanel
      * @return
@@ -263,6 +309,13 @@ public class GuiFileAdmin extends JPanel{
      */
     public JButton getBotonEncrypt() {
         return butEncript;
+    }
+	/**
+     * Devuelve el boton Cancelar
+     * @return
+     */
+    public JButton getBotonCancel() {
+        return butCancel;
     }
 	/**
 	* Devuelve el textarea read

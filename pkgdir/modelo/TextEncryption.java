@@ -23,8 +23,9 @@ public class TextEncryption{
 		
 	}
 
-	public void doCrypto(int cipherMode, String key, File inputFile, File outputFile) {
+	public boolean doCrypto( int cipherMode, String key, File inputFile ) {
 		System.out.println("cipherMode: "+cipherMode);		
+		boolean encok = true;	
 		try {
 			setKey(key);				
 			Cipher cipher = Cipher.getInstance(TRANSFORMATION);
@@ -33,13 +34,15 @@ public class TextEncryption{
 			byte[] inputBytes = new byte[(int) inputFile.length()];
 			inputStream.read(inputBytes);
 			byte[] outputBytes = cipher.doFinal(inputBytes);
-			FileOutputStream outputStream = new FileOutputStream(outputFile);
+			FileOutputStream outputStream = new FileOutputStream(inputFile);//el mismo archivo
 			outputStream.write(outputBytes);
 			inputStream.close();
 			outputStream.close();
 		} catch ( Exception e) {
-		  e.printStackTrace();
+			encok = false;
+		  	e.printStackTrace();
 		}
+		return encok;
 	}
 
 	public void setKey(final String myKey) {

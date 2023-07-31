@@ -3,7 +3,6 @@ package pkgdir.control;
 
 import java.io.File;
 import pkgdir.modelo.MysqlServices;
-import pkgdir.modelo.TextEncryption;
 import pkgdir.modelo.OsCommandServices;
 import pkgdir.graficos.GuiMenu;
 import pkgdir.graficos.GuiDatabase;
@@ -20,7 +19,6 @@ public class Controller implements ActionListener{
 
 	private GuiMenu guiMenul;
 	private MysqlServices msqlserv;
-	private TextEncryption textEncryption;
 	private OsCommandServices osComServ;
 	private String stmpg;
 	private CaretListener listener;
@@ -101,25 +99,6 @@ public class Controller implements ActionListener{
 			thread.start();
 	   	}
 		/*
-		* Evento sobre boton Encriptar
-		*/
-		if( ae.getSource() == guiMenul.getBotonEncrypt() ){
-			textEncryption = new TextEncryption();
-			textEncryption.doCrypto(1, "lassorh", new File("historial.txt"), new File("historialEnc.txt"));
-			File ftempE = new File( "historialEnc.txt" );
-			if( ftempE.exists() )
-				guiMenul.gettextAreaRead( guiMenul.getEncryptJPanel() ).setText( "Encriptacion realizada\n" );
-			else
-				guiMenul.gettextAreaRead( guiMenul.getEncryptJPanel() ).append( "Encriptacion fallo\n" );
-			textEncryption.doCrypto(2, "lassorh", new File("historialEnc.txt"), new File("historialDec.txt"));
-			File ftempD = new File( "historialDec.txt" );
-			if( ftempD.exists() )
-				guiMenul.gettextAreaRead( guiMenul.getEncryptJPanel() ).append( "Desencriptacion realizada\n" );
-			else
-				guiMenul.gettextAreaRead( guiMenul.getEncryptJPanel() ).append( "Desencriptacion fallo\n" );
-
-	   	}
-		/*
 		* Evento sobre item salir
 		*/
 		if( ae.getSource() == guiMenul.getItemExit()){
@@ -152,7 +131,6 @@ public class Controller implements ActionListener{
 		if( ae.getSource() == guiMenul.getItemEncr()){
 			guiMenul.getMainJPanel().removeAll();
 			guiMenul.getMainJPanel().add(Box.createVerticalStrut(10));
-			guiMenul.getMainJPanel().add(  guiMenul.getEncryptJPanel() );	
 			guiMenul.getMainJPanel().revalidate();
 			guiMenul.getMainJPanel().repaint();
 	   	}
@@ -169,7 +147,6 @@ public class Controller implements ActionListener{
 		guiMenul.getItemCommand().addActionListener(this);
 		guiDatabase.getBotonReadDb().addActionListener(this);
 		guiMenul.getBotonCommand().addActionListener(this);
-		guiMenul.getBotonEncrypt().addActionListener(this);
 		/*
 		* Obtiene la seleccion delusuario soble el TextArea para Borrar
 		*/

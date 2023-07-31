@@ -61,7 +61,7 @@ public class FileServices{
 			}
 			System.out.println("data: "+data.length());	
 			if( data.length() <= 0 ){
-				data = "Error: No es posible editar el archivo\nSi fue encriptado por esta aplicacion\nPruebe con boton Desencriptar";
+				data = "Archivo no valido: No es posible editar el archivo\nSi fue encriptado por esta aplicacion\nPruebe con boton Desencriptar\n";
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();

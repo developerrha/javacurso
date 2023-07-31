@@ -4,6 +4,7 @@ package pkgdir.control;
 import pkgdir.graficos.GuiMenu;
 import pkgdir.graficos.GuiFileAdmin;
 import pkgdir.modelo.FileServices;
+import pkgdir.modelo.TextEncryption;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.ListSelectionListener;
@@ -23,6 +24,7 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 	private GuiMenu guiMenul;
 	public GuiFileAdmin guiFileAdminl;
 	private FileServices fileServices;
+	private TextEncryption textEncryption;
    	private DefaultListModel lst_files_model = new DefaultListModel();
 	private ListSelectionModel listSelectionModel;
 
@@ -68,7 +70,8 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 						guiFileAdminl.getScrollAreaRead().setVisible(true);				
 						guiFileAdminl.getBotonReadTxt().setVisible(true);				
 						guiFileAdminl.getButtonsJPanel().setVisible(true);			
-						guiFileAdminl.getBotonWrite().setEnabled(false);	
+						guiFileAdminl.getBotonWrite().setEnabled(false);
+						guiFileAdminl.getBotonEncrypt().setEnabled(false);	
 						guiFileAdminl.getBotonZipFiles().setVisible(false);				
 					}else{
 						guiFileAdminl.getLabelFileName().setText( "Lista de seleccion" );
@@ -104,8 +107,18 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 			String stmp = fileServices.readFile( filePath );	
 			(guiFileAdminl.gettextAreaRead()).setText( stmp );
 			if( stmp.indexOf("Error:") != 0 && stmp.length() > 10 ){
-				guiFileAdminl.getBotonWrite().setEnabled(true);				
-			}	
+				guiFileAdminl.getBotonWrite().setEnabled(true);
+				guiFileAdminl.getBotonEncrypt().setEnabled(true);								
+			}
+			if( stmp.indexOf("Archivo no valido:") == 0){
+				System.out.println("stmp: 0 true");
+				guiFileAdminl.getBotonWrite().setEnabled(false);
+				guiFileAdminl.getBotonEncrypt().setText("Desencriptar archivo");
+				guiFileAdminl.getBotonEncrypt().setEnabled(true);								
+			}
+	
+			guiMenul.getMainJPanel().revalidate();
+			guiMenul.getMainJPanel().repaint();
 	   	}
 		/*
 		* Evento sobre boton Escribir Txt
@@ -116,6 +129,37 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 			fileServices = new FileServices();
 			fileServices.writeFile( stmp, filePath );
 	   	}
+		/*
+		* Evento sobre boton Encriptar Txt
+		*/
+		if( ae.getSource() == guiFileAdminl.getBotonEncrypt() ){
+			String filePath = guiFileAdminl.getLabelFileName().getText();
+			textEncryption = new TextEncryption();
+			if( guiFileAdminl.getBotonEncrypt().getText().equals( "Encriptar archivo" ) ){
+				boolean encok = textEncryption.doCrypto(1, "lassorh", new File( filePath ));
+				//File ftempE = new File( "historial.txt" );
+				if( encok ){
+					guiFileAdminl.gettextAreaRead().setText( "Encriptacion realizada\n" );
+					guiFileAdminl.getBotonWrite().setEnabled(false);
+					guiFileAdminl.getBotonEncrypt().setText("Desencriptar archivo");
+
+				}else{
+					guiFileAdminl.gettextAreaRead().append( "Encriptacion fallo\n" );
+				}
+			}else{
+				boolean encok =  textEncryption.doCrypto(2, "lassorh", new File( filePath ));
+				if( encok ){
+					guiFileAdminl.gettextAreaRead().append( "Desencriptacion realizada\n" );
+					guiFileAdminl.getBotonEncrypt().setText("Encriptar archivo");
+					guiFileAdminl.getBotonEncrypt().setEnabled(false);								
+				}else{
+					guiFileAdminl.gettextAreaRead().append( "Desencriptacion fallo\n" );
+				}
+			}
+			guiMenul.getMainJPanel().revalidate();
+			guiMenul.getMainJPanel().repaint();
+	   	}
+
 		/*
 		* Evento sobre boton Cancelar
 		*/
@@ -162,12 +206,12 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
      * Metodo que agrega eventos sobre los componentes de GuiMenu
      */
 	private void agregarEventos(){
-		System.out.println("Eventos en Files Admin");
 		guiMenul.getItemTxt().addActionListener(this);
 		guiFileAdminl.getFileChooser().addActionListener(this);
 		guiFileAdminl.getBotonReadTxt().addActionListener(this);
 		guiFileAdminl.getBotonWrite().addActionListener(this);
 		guiFileAdminl.getBotonCancel().addActionListener(this);
+		guiFileAdminl.getBotonEncrypt().addActionListener(this);
 		listSelectionModel = guiFileAdminl.getListSelFiles( ).getSelectionModel();
 		listSelectionModel.addListSelectionListener( this );
 	}

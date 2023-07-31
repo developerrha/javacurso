@@ -25,7 +25,6 @@ public class GuiMenu extends JFrame{
 	private JPanel jtmp;
 	private JPanel panelTxt;
 	private JPanel panelCommand;
-	private JPanel panelEncrypt;
 	private JMenuBar menuBar;
 	private JMenu menuTasks;
 	private JMenu menuSet;
@@ -38,7 +37,6 @@ public class GuiMenu extends JFrame{
 	private JButton butReadDb;
 	private JButton butDel;
 	private JButton butCommand;
-	private JButton butEncrypt;
 	private JTextArea areaRead;
 	private JScrollPane scrollRead;
 
@@ -71,7 +69,6 @@ public class GuiMenu extends JFrame{
 			this.setIconImage( new ImageIcon( GuiMenu.class.getResource( "../../res/img_icon_litle.jpg" ) ).getImage()  );
 			this.setVisible(true);
 			drawPanCommand();
-			drawPanEncrypt();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -157,24 +154,6 @@ public class GuiMenu extends JFrame{
 		return butCommand;
 	}
 	/**
-	*Metodo que pinta el JButton butEncrypt
-	*Retorna JButton
-	*/
-	private JButton drawButtonEncrypt(){
-		try{
-		     URL url = GuiMenu.class.getResource("../../res/encrypt_bl.png");
-		     BufferedImage img = ImageIO.read(url);
-			butEncrypt = new JButton("Encriptacion",new ImageIcon(img));
-			butEncrypt.setBackground( new Color( 168, 168, 73, 50 ) );
-			butEncrypt.setFont(butEncrypt.getFont().deriveFont(Font.BOLD | Font.ITALIC));
-			butEncrypt.setAlignmentX(panel.CENTER_ALIGNMENT);
-			butEncrypt.setFocusPainted(true);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return butEncrypt;
-	}
-	/**
 	*Metodo que pinta el JTextField texffWrite Jlabel dentro de un JPanel
 	*Retorna JTextField
 	*/
@@ -241,27 +220,6 @@ public class GuiMenu extends JFrame{
 			e.printStackTrace();
 		}
 		return panelCommand;
-	}
-	/**
-	*Metodo que pinta el JPanel de Encrypt
-	*Retorna JPanel
-	*/
-
-	private JPanel drawPanEncrypt(){
-		try{
-			panelEncrypt = new JPanel();
-		     panelEncrypt.setLayout(new BoxLayout(panelEncrypt,BoxLayout.Y_AXIS));
-			panelEncrypt.setBackground( new Color( 146, 168, 73 , 30 ) );
-			panelEncrypt.setPreferredSize(new Dimension(750, 450));
-		     panelEncrypt.setMaximumSize(new Dimension(750, 450));
-			panelEncrypt.add(Box.createVerticalStrut(10));
-			panelEncrypt.add( drawButtonEncrypt() );
-			panelEncrypt.add(Box.createVerticalStrut(10));
-			panelEncrypt.add(drawAreaRead());
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return panelEncrypt;
 	}
 	/**
 	*Metodo que pinta el JPanel
@@ -338,14 +296,6 @@ public class GuiMenu extends JFrame{
     public JPanel getCommandJPanel() {
         return panelCommand;
     }
-	/**
-     * Devuelve el Encrypt JPanel
-     * @return
-     */
-    public JPanel getEncryptJPanel() {
-        return panelEncrypt;
-    }
-
 
 	/**
      * Devuelve el boton borrar Txt
@@ -360,13 +310,6 @@ public class GuiMenu extends JFrame{
      */
     public JButton getBotonCommand() {
         return butCommand;
-    }
-	/**
-     * Devuelve el boton Encrypt
-     * @return
-     */
-    public JButton getBotonEncrypt() {
-        return butEncrypt;
     }
 	/**
      * Devuelve el texField write Txt

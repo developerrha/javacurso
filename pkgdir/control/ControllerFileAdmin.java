@@ -5,6 +5,7 @@ import pkgdir.graficos.GuiMenu;
 import pkgdir.graficos.GuiFileAdmin;
 import pkgdir.modelo.FileServices;
 import pkgdir.modelo.TextEncryption;
+import pkgdir.modelo.ZipFilesService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.ListSelectionListener;
@@ -15,6 +16,8 @@ import javax.swing.Box;
 import javax.swing.JFileChooser;
 import java.io.File;
 import java.util.List;
+import java.util.ArrayList;
+import java.sql.Timestamp;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 
@@ -25,8 +28,10 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 	public GuiFileAdmin guiFileAdminl;
 	private FileServices fileServices;
 	private TextEncryption textEncryption;
+	private ZipFilesService zipFilesService;
    	private DefaultListModel lst_files_model = new DefaultListModel();
 	private ListSelectionModel listSelectionModel;
+	private ArrayList<String> arrayPaths;
 
 	/**
      * Constructor sin parametros
@@ -84,7 +89,7 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 						guiFileAdminl.getScrollAreaRead().setVisible(false);				
 						guiFileAdminl.getBotonReadTxt().setVisible(false);				
 						guiFileAdminl.getButtonsJPanel().setVisible(false);					
-						guiFileAdminl.getBotonZipFiles().setVisible(true);				
+						guiFileAdminl.getButtonsFilesList().setVisible(true);				
 					}
 					guiFileAdminl.getLabelFileName().setVisible(true);	
 					guiFileAdminl.getFileChooser().setVisible(false);	
@@ -111,7 +116,6 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 				guiFileAdminl.getBotonEncrypt().setEnabled(true);								
 			}
 			if( stmp.indexOf("Archivo no valido:") == 0){
-				System.out.println("stmp: 0 true");
 				guiFileAdminl.getBotonWrite().setEnabled(false);
 				guiFileAdminl.getBotonEncrypt().setText("Desencriptar archivo");
 				guiFileAdminl.getBotonEncrypt().setEnabled(true);								
@@ -159,11 +163,34 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 			guiMenul.getMainJPanel().revalidate();
 			guiMenul.getMainJPanel().repaint();
 	   	}
-
+		/*
+		* Evento sobre boton Enzipar
+		*/
+		if( ae.getSource() == guiFileAdminl.getBotonZipFiles()){
+			Timestamp timeNow = new Timestamp(System.currentTimeMillis());
+			String zname = "homzode_"+(timeNow.toString()).replaceAll( " ", "-" )+".zip";
+			zipFilesService = new ZipFilesService();
+			zipFilesService.zipTsFiles( arrayPaths, zname );
+			File fzip = new File( zname );
+			if( fzip.exists() ){
+				guiFileAdminl.getFileJPanel().removeAll();
+				guiFileAdminl.showPanel();
+				agregarEventos();
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();	
+			}
+			
+	   	}
+		/*
+		* Evento sobre boton Enviar a FTP
+		*/
+		if( ae.getSource() == guiFileAdminl.getBotonSendFtp()){
+			System.out.println("Soy el boton enviar a FTP");
+	   	}
 		/*
 		* Evento sobre boton Cancelar
 		*/
-		if( ae.getSource() == guiFileAdminl.getBotonCancel()){
+		if( ae.getSource() == guiFileAdminl.getBotonCancel() || ae.getSource() == guiFileAdminl.getBotonCancelZip() ){
 			guiFileAdminl.getFileJPanel().removeAll();
 			guiFileAdminl.showPanel();
 			agregarEventos();
@@ -190,15 +217,23 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
      */
 	@Override
 	public void valueChanged(ListSelectionEvent evlist) { 
+		try{
 		if (!evlist.getValueIsAdjusting()) {
 			int selections[] = guiFileAdminl.getListSelFiles( ).getSelectedIndices();
 			List<String> selectedTags = guiFileAdminl.getListSelFiles( ).getSelectedValuesList();
+			arrayPaths = new ArrayList<>();
 		     for (int i = 0, n = selections.length; i < n; i++) {
-		       if (i == 0) {
-		         System.out.println(" Selections: ");
-		       }
-		       System.out.println(selections[i] + "  " + selectedTags.get(i) + " ");
+				arrayPaths.add(selectedTags.get(i));	
+
 		     }
+			if( arrayPaths.size() < 1 ){
+				guiFileAdminl.getBotonZipFiles().setEnabled(false);
+			}else{
+				guiFileAdminl.getBotonZipFiles().setEnabled(true);
+			}
+		}
+		}catch( Exception e){
+			e.printStackTrace();
 		}
 	}
 	
@@ -211,7 +246,10 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 		guiFileAdminl.getBotonReadTxt().addActionListener(this);
 		guiFileAdminl.getBotonWrite().addActionListener(this);
 		guiFileAdminl.getBotonCancel().addActionListener(this);
+		guiFileAdminl.getBotonCancelZip().addActionListener(this);
 		guiFileAdminl.getBotonEncrypt().addActionListener(this);
+		guiFileAdminl.getBotonZipFiles().addActionListener(this);
+		guiFileAdminl.getBotonSendFtp().addActionListener(this);
 		listSelectionModel = guiFileAdminl.getListSelFiles( ).getSelectionModel();
 		listSelectionModel.addListSelectionListener( this );
 	}

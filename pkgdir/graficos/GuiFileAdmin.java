@@ -18,12 +18,15 @@ public class GuiFileAdmin extends JPanel{
 	
 	private JPanel panel;
 	private JPanel jtmpCb;
+	private JPanel jtmpCbFilesList;
 	private JFileChooser fileChTxt;
 	private JButton butReadTxt;
 	private JButton butWrite;
 	private JButton butEncript;
 	private JButton butZipFile;
+	private JButton butSendFtp;
 	private JButton butCancel;
+	private JButton butCancelzip;
 	private JTextArea areaRead;
 	private JScrollPane scrollRead;
 	private JLabel labFileName;
@@ -61,7 +64,7 @@ public class GuiFileAdmin extends JPanel{
 			this.add(Box.createVerticalStrut(10));
 			this.add( drawButtonsFileSave()  );
 			this.add(Box.createVerticalStrut(10));
-			this.add( drawButtonZipFiles() );
+			this.add( drawButtonsFilesList() );
 			this.add(Box.createVerticalStrut(10));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -69,15 +72,40 @@ public class GuiFileAdmin extends JPanel{
 	}
 
 	/**
-	*Metodo que pinta el JPanel botonera
+	*Metodo que pinta el JPanel botonera Files list
+	*Retorna JPanel
+	*/
+	private JPanel drawButtonsFilesList(){
+		jtmpCbFilesList = new JPanel();
+		try{
+			jtmpCbFilesList.setLayout(new BoxLayout(jtmpCbFilesList,BoxLayout.X_AXIS));	
+			jtmpCbFilesList.setBackground(new Color(0,0,0,0));		
+			jtmpCbFilesList.add(drawButtonZipFiles());
+			jtmpCbFilesList.add(Box.createHorizontalStrut(10));
+			jtmpCbFilesList.add(drawButtonSendFtp());
+			jtmpCbFilesList.add(Box.createHorizontalStrut(10));
+			jtmpCbFilesList.add(drawButtonCancelZip());
+			jtmpCbFilesList.setVisible(false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return jtmpCbFilesList;
+	}
+
+
+	/**
+	*Metodo que pinta el JPanel botonera editar
 	*Retorna JPanel
 	*/
 	private JPanel drawButtonsFileSave(){
 		jtmpCb = new JPanel();
 		try{
 			jtmpCb.setLayout(new BoxLayout(jtmpCb,BoxLayout.X_AXIS));			
+			jtmpCb.setBackground(new Color(0,0,0,0));		
 			jtmpCb.add(drawButtonWrite());
+			jtmpCb.add(Box.createHorizontalStrut(10));
 			jtmpCb.add(drawButtonEncript());
+			jtmpCb.add(Box.createHorizontalStrut(10));
 			jtmpCb.add(drawButtonCancel());
 			jtmpCb.setVisible(false);
 		}catch(Exception e){
@@ -204,18 +232,36 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonZipFiles(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/encrypt_bl.png");
+		     URL url = GuiMenu.class.getResource("../../res/zip_bl.png");
 		     BufferedImage img = ImageIO.read(url);
-			butZipFile = new JButton("Crear contenedor Zip",new ImageIcon(img));
+			butZipFile = new JButton("Crear Zip",new ImageIcon(img));
 			butZipFile.setBackground( new Color( 168, 168, 73, 30 ) );
 			butZipFile.setFont(butZipFile.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			butZipFile.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butZipFile.setEnabled( false );
 			butZipFile.setFocusPainted(true);
-			butZipFile.setVisible(false);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return butZipFile;
+	}
+	/**
+	*Metodo que pinta el JButton sendFtp Files
+	*Retorna JButton
+	*/
+	private JButton drawButtonSendFtp(){
+		try{
+		     URL url = GuiMenu.class.getResource("../../res/ftp_bl.png");
+		     BufferedImage img = ImageIO.read(url);
+			butSendFtp = new JButton("Enviar a FTP",new ImageIcon(img));
+			butSendFtp.setBackground( new Color( 168, 168, 73, 30 ) );
+			butSendFtp.setFont(butSendFtp.getFont().deriveFont(Font.BOLD | Font.ITALIC));
+			butSendFtp.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butSendFtp.setFocusPainted(true);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return butSendFtp;
 	}
 	/**
 	*Metodo que pinta el JButton butCancel Files
@@ -235,6 +281,24 @@ public class GuiFileAdmin extends JPanel{
 			e.printStackTrace();
 		}
 		return butCancel;
+	}
+/**
+	*Metodo que pinta el JButton butCancel Files Zip
+	*Retorna JButton
+	*/
+	private JButton drawButtonCancelZip(){
+		try{
+		     URL url = GuiMenu.class.getResource("../../res/cancel_bl.png");
+		     BufferedImage img = ImageIO.read(url);
+			butCancelzip= new JButton("Cancelar",new ImageIcon(img));
+			butCancelzip.setBackground( new Color( 168, 168, 73, 30 ) );
+			butCancelzip.setFont(butCancelzip.getFont().deriveFont(Font.BOLD | Font.ITALIC));
+			butCancelzip.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butCancelzip.setFocusPainted(true);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return butCancelzip;
 	}
 	/**
 	*Metodo que pinta el JTextArea dentro de un JScrollPane
@@ -272,6 +336,13 @@ public class GuiFileAdmin extends JPanel{
      */
     public JPanel getButtonsJPanel() {
         return jtmpCb;
+    }
+	/**
+     * Devuelve el Botones enzipar JPanel
+     * @return Jpanel
+     */
+    public JPanel getButtonsFilesList() {
+        return jtmpCbFilesList;
     }
 
 	/**
@@ -318,6 +389,14 @@ public class GuiFileAdmin extends JPanel{
         return butCancel;
     }
 	/**
+     * Devuelve el boton Cancelar zip
+     * @return
+     */
+    public JButton getBotonCancelZip() {
+        return butCancelzip;
+    }
+
+	/**
 	* Devuelve el textarea read
 	* @return
 	*/
@@ -351,6 +430,13 @@ public class GuiFileAdmin extends JPanel{
      */
     public JButton getBotonZipFiles() {
         return butZipFile;
+    }
+	/**
+     * Devuelve el boton enviar a FTP 
+     * @return
+     */
+    public JButton getBotonSendFtp() {
+        return butSendFtp;
     }
 
 

@@ -89,7 +89,7 @@ public class GuiMenu extends JFrame{
 		menuTasks.add( itemDataBas );
 		itemCommand = new JMenuItem( "Comandos" );
 		menuTasks.add( itemCommand );
-		itemEncrypt = new JMenuItem( "Encriptacion" );
+		itemEncrypt = new JMenuItem( "Descargas" );
 		menuTasks.add( itemEncrypt );
 		menuTasks.addSeparator();
 		itemExit = new JMenuItem( "Salir" );

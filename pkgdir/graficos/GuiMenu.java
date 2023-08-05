@@ -83,7 +83,7 @@ public class GuiMenu extends JFrame{
 		menuSet = new JMenu("Configuracion");
 		menuBar.add(menuTasks);
 		menuBar.add(menuSet);
-		itemTxtFile = new JMenuItem( "Archivo plano" );
+		itemTxtFile = new JMenuItem( "Archivos" );
 		menuTasks.add( itemTxtFile );
 		itemDataBas = new JMenuItem( "Base de datos" );
 		menuTasks.add( itemDataBas );
@@ -238,6 +238,13 @@ public class GuiMenu extends JFrame{
 		return panel;
 	}
 
+	/**
+     * Devuelve el main JFrame
+     * @return this
+     */
+    public JFrame getMainJFrame() {
+        return this;
+    }
 	/**
      * Devuelve el Item salir
      * @return

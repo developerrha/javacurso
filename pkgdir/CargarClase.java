@@ -35,7 +35,7 @@ public class CargarClase {
 			front = new GuiMenu();
 			front.showWin("JAVA BASICO");
 			frontConfig = new GuiConfig();
-			frontFileAdmin = new GuiFileAdmin();
+			frontFileAdmin = new GuiFileAdmin( );
 			Controller controlador = new Controller( front );
 			ControllerConfig controlConf = new ControllerConfig( front, frontConfig );
 			ControllerFileAdmin controllerFileAdmin = new ControllerFileAdmin( front, frontFileAdmin );

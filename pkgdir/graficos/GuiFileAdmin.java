@@ -8,7 +8,6 @@ import java.awt.Font;
 import java.awt.Dimension;
 import javax.imageio.ImageIO;
 import java.net.URL;
-import java.awt.Component;
 import java.awt.Toolkit;
 
 /**
@@ -33,12 +32,10 @@ public class GuiFileAdmin extends JPanel{
 	private JList<String> listSelFiles;
 	private JScrollPane scrollSelFiles;
 
-
-
 	/**
 	*Metodo constructor de la clase		
 	*/
-	public GuiFileAdmin() {
+	public GuiFileAdmin( ) {
 	}
 
 	/**
@@ -257,6 +254,7 @@ public class GuiFileAdmin extends JPanel{
 			butSendFtp.setBackground( new Color( 168, 168, 73, 30 ) );
 			butSendFtp.setFont(butSendFtp.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			butSendFtp.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butSendFtp.setEnabled( false );
 			butSendFtp.setFocusPainted(true);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -322,7 +320,6 @@ public class GuiFileAdmin extends JPanel{
 		}
 		return scrollRead;
 	}
-
 	/**
      * Devuelve el File JPanel
      * @return Jpanel
@@ -438,6 +435,5 @@ public class GuiFileAdmin extends JPanel{
     public JButton getBotonSendFtp() {
         return butSendFtp;
     }
-
 
 }

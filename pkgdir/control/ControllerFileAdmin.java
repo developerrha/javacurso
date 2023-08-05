@@ -6,14 +6,22 @@ import pkgdir.graficos.GuiFileAdmin;
 import pkgdir.modelo.FileServices;
 import pkgdir.modelo.TextEncryption;
 import pkgdir.modelo.ZipFilesService;
+import pkgdir.modelo.FTPFilesService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Component;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.Box;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
@@ -29,9 +37,12 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 	private FileServices fileServices;
 	private TextEncryption textEncryption;
 	private ZipFilesService zipFilesService;
+	private FTPFilesService ftpFilesService;
    	private DefaultListModel lst_files_model = new DefaultListModel();
 	private ListSelectionModel listSelectionModel;
 	private ArrayList<String> arrayPaths;
+	private File[] sel_files;
+	private String currentdir;		
 
 	/**
      * Constructor sin parametros
@@ -79,6 +90,9 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 						guiFileAdminl.getBotonEncrypt().setEnabled(false);	
 						guiFileAdminl.getBotonZipFiles().setVisible(false);				
 					}else{
+						currentdir = System.getProperty("user.dir");
+						currentdir = currentdir.substring( currentdir.lastIndexOf("/")+1 );
+						System.out.println("currentdir: " + currentdir);
 						guiFileAdminl.getLabelFileName().setText( "Lista de seleccion" );
 						for(int i=0;i<sel_files.length;i++){
 							String n_msource = sel_files[i].getParent()+"/"+sel_files[i].getName();
@@ -185,7 +199,32 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 		* Evento sobre boton Enviar a FTP
 		*/
 		if( ae.getSource() == guiFileAdminl.getBotonSendFtp()){
-			System.out.println("Soy el boton enviar a FTP");
+			try{
+				Component parent = guiFileAdminl.getParent();
+				Component parent_a = (JPanel)parent.getParent();
+				ftpFilesService = new FTPFilesService();
+				if( ftpFilesService.ftpConnect() ){
+					System.out.println("Conectado a servidor FTP");	
+					ftpFilesService.ftpLoadFiles( arrayPaths, currentdir );
+					JOptionPane.showInternalMessageDialog( parent_a , "Se cargaron "+ftpFilesService.getCountFilesUpload( )+" archivos al servidor FTP");  
+				}else{
+					JOptionPane.showInternalMessageDialog( parent_a , "No se conecto al servidor FTP");
+					guiFileAdminl.getBotonSendFtp().setEnabled( false );
+					guiFileAdminl.getFileJPanel().removeAll();
+					guiFileAdminl.showPanel();
+					agregarEventos();
+					guiMenul.getMainJPanel().revalidate();
+					guiMenul.getMainJPanel().repaint();
+					
+				}
+				if( ftpFilesService.ftpClient.isConnected() ){
+					ftpFilesService.ftpClient.logout();
+				}
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();	
+			}catch( Exception e){
+				e.printStackTrace();
+			}
 	   	}
 		/*
 		* Evento sobre boton Cancelar
@@ -196,9 +235,7 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 			agregarEventos();
 			guiMenul.getMainJPanel().revalidate();
 			guiMenul.getMainJPanel().repaint();
-
 	   	}
-
 		/*
 		* Evento sobre MenuItem file admin 
 		*/
@@ -228,8 +265,10 @@ public class ControllerFileAdmin implements ActionListener, ListSelectionListene
 		     }
 			if( arrayPaths.size() < 1 ){
 				guiFileAdminl.getBotonZipFiles().setEnabled(false);
+				guiFileAdminl.getBotonSendFtp().setEnabled(false);
 			}else{
 				guiFileAdminl.getBotonZipFiles().setEnabled(true);
+				guiFileAdminl.getBotonSendFtp().setEnabled(true);
 			}
 		}
 		}catch( Exception e){

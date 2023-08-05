@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Created-By: nombre
-Class-Path: . lib/mysql-connector-java-8.0.11.jar lib/zip4j-2.11.2.jar
+Class-Path: . lib/mysql-connector-java-8.0.11.jar lib/zip4j-2.11.2.jar lib/commons-net-1.2.1.jar
 Main-Class: pkgdir.CargarClase

@@ -27,8 +27,12 @@ public class MysqlServices{
 			}
 			con.close();  
 			objtemp[1] = stmp;
+		}catch(java.sql.SQLSyntaxErrorException sqle){ 
+			System.out.println("ErrorSQL: "+ sqle.toString());
+			objtemp[0] = new String[]{"Error: ", "SQLSyntaxErrorException"};
+			objtemp[1] = "ErrorSql: ,"+query+"\n";
 		}catch(Exception e){ 
-			e.printStackTrace();
+			System.out.println("Error: "+ e.toString());
 		}
 		return objtemp;
 	}

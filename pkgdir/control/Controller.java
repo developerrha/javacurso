@@ -10,7 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.Box;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -59,29 +64,20 @@ public class Controller implements ActionListener{
 		* Evento sobre boton LeerDb
 		*/
 		if( ae.getSource() == guiDatabase.getBotonReadDb()){
-			//Obtiene el texto que digita el usuario en el textarea
 			String stmp = (guiDatabase.gettextAreaRead( ) ).getText();	
-			//Instancia la clase del modelo de datos
 			msqlserv = new MysqlServices();
-			//Obtiene datos desde MysqlServices arreglo objeto con 2 elementos
 			Object[] objtemp = msqlserv.getDataFromMysql( stmp );
-			//Asigna resultado de split sobre el elemento 1 del arrego enviado desde el modelo de datos
 			String[] dataRows = ((String)objtemp[1]).split("\n");
-			//Limpia elcontenido de la tabla
 			((DefaultTableModel)guiDatabase.getTableRead( ).getModel()).setRowCount(0);
 			((DefaultTableModel)guiDatabase.getTableRead( ).getModel()).setColumnCount(0);
-			//Escribe los titulos del la columnas que envio el modelo de datos
 			for(int i = 0; i< ((String[])objtemp[0]).length; i++){
 				((DefaultTableModel)guiDatabase.getTableRead( ).getModel()).addColumn( ((String[])objtemp[0])[i] );
+
 			}
-			//Recorre el arreglo resultante del split sobre el strin que envio el modelo de datos
 			for(int i = 0; i< dataRows.length; i++){
-				//Asigna a un arreglo temporal el split por comas sobre cada fila que envio elmodelo de datos
 				String[] dataCols = dataRows[i].split(",");
-				//Adiciona el arreglo temporal como una fila al DefaultTableModel de datos de la tabla
 				((DefaultTableModel)guiDatabase.getTableRead( ).getModel()).addRow( dataCols );
 			}
-			// Repinta el Main Panel
 			guiMenul.getMainJPanel().revalidate();
 			guiMenul.getMainJPanel().repaint();
 	   	}
@@ -148,6 +144,33 @@ public class Controller implements ActionListener{
 		guiDatabase.getBotonReadDb().addActionListener(this);
 		guiMenul.getBotonCommand().addActionListener(this);
 		/*
+		* Agrega eventos sobre las columnas de la tabla
+		*/
+
+		guiDatabase.getTableRead( ).getColumnModel().addColumnModelListener(new TableColumnModelListener(){
+			public void columnMarginChanged(ChangeEvent e){
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();
+			}
+			public void columnSelectionChanged(ListSelectionEvent e){
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();			
+			}
+			public void columnAdded(TableColumnModelEvent e){
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();			
+			}
+			public void columnMoved(TableColumnModelEvent e){
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();			
+			}
+			public void columnRemoved(TableColumnModelEvent e){
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();			
+			}
+		});		
+
+		/*
 		* Obtiene la seleccion delusuario soble el TextArea para Borrar
 		*/
 		listener = new CaretListener() {
@@ -165,15 +188,6 @@ public class Controller implements ActionListener{
 	     };
 		//guiMenul.gettextAreaRead( guiMenul.getTxtJPanel() ).addCaretListener(listener);
 	}
-
-
-
-
-
-
-
-
-
 
 
 

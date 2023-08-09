@@ -16,10 +16,13 @@ import java.awt.Toolkit;
 public class GuiDatabase extends JPanel{
 	private JLabel labText;
 	private JButton butReadDb;
+	private JButton butCancel;
 	private JTextArea areaRead;
 	private JScrollPane scrollRead;
 	private JTable tableDb;
 	private JScrollPane scrollTableDb;
+	private JPanel panel;
+	private JPanel jtmpCbDbList;
 
 
 	/**
@@ -43,7 +46,7 @@ public class GuiDatabase extends JPanel{
 			this.add(Box.createVerticalStrut(10));
 			this.add(drawAreaRead());
 			this.add(Box.createVerticalStrut(10));
-			this.add( drawButtonReadDb() );
+			this.add( drawButtonsDBList() );
 			this.add(Box.createVerticalStrut(10));
 			this.add( drawTableData() );
 			this.add(Box.createVerticalStrut(10));
@@ -52,12 +55,30 @@ public class GuiDatabase extends JPanel{
 		}
 	}
 	/**
+	*Metodo que pinta el JPanel botonera DB
+	*Retorna JPanel
+	*/
+	private JPanel drawButtonsDBList(){
+		jtmpCbDbList = new JPanel();
+		try{
+			jtmpCbDbList.setLayout(new BoxLayout(jtmpCbDbList,BoxLayout.X_AXIS));	
+			jtmpCbDbList.setBackground(new Color(0,0,0,0));		
+			jtmpCbDbList.add(drawButtonReadDb());
+			jtmpCbDbList.add(Box.createHorizontalStrut(10));
+			jtmpCbDbList.add(drawButtonCancel());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return jtmpCbDbList;
+	}
+
+	/**
 	*Metodo que pinta el JLabel labText
 	*Retorna JLabel
 	*/
 	private JLabel drawLabText(){
 		try{
-			labText = new JLabel( "Editor de sentencias Query" );
+			labText = new JLabel( "Editor de sentencias SQL" );
 			labText.setBackground( new Color( 168, 168, 73, 50 ) );
 			labText.setFont(labText.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			labText.setAlignmentX(this.CENTER_ALIGNMENT);
@@ -79,6 +100,7 @@ public class GuiDatabase extends JPanel{
 			butReadDb.setFont(butReadDb.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			butReadDb.setAlignmentX(this.CENTER_ALIGNMENT);
 			butReadDb.setFocusPainted(true);
+			butReadDb.setEnabled(false);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -126,6 +148,25 @@ public class GuiDatabase extends JPanel{
 		}
 		return scrollTableDb;
 	}
+	/**
+	*Metodo que pinta el JButton butCancel DB
+	*Retorna JButton
+	*/
+	private JButton drawButtonCancel(){
+		try{
+		     URL url = GuiMenu.class.getResource("../../res/cancel_bl.png");
+		     BufferedImage img = ImageIO.read(url);
+			butCancel = new JButton("Cancelar",new ImageIcon(img));
+			butCancel.setBackground( new Color( 168, 168, 73, 30 ) );
+			butCancel.setFont(butCancel.getFont().deriveFont(Font.BOLD | Font.ITALIC));
+			butCancel.setAlignmentX(panel.CENTER_ALIGNMENT);
+			butCancel.setFocusPainted(true);
+//			butCancel.setVisible(false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return butCancel;
+	}
 
 	/**
      * Devuelve el boton leerDb
@@ -135,11 +176,26 @@ public class GuiDatabase extends JPanel{
         return butReadDb;
     }
 	/**
+     * Devuelve el boton Cancelar
+     * @return
+     */
+    public JButton getBotonCancel() {
+        return butCancel;
+    }
+
+	/**
      * Devuelve el DB JPanel
      * @return
      */
     public JPanel getDBJPanel() {
         return this;
+   	}
+	/**
+     * Devuelve el DB JPanel lista
+     * @return Jpanel
+     */
+    public JPanel getButtonsDbList() {
+        return jtmpCbDbList;
     }
 	/**
 	* Devuelve el textarea read

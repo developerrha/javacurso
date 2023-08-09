@@ -10,9 +10,11 @@ package pkgdir;
 import pkgdir.graficos.GuiMenu;
 import pkgdir.graficos.GuiConfig;
 import pkgdir.graficos.GuiFileAdmin;
+import pkgdir.graficos.GuiDatabase;
 import pkgdir.control.Controller;
 import pkgdir.control.ControllerConfig;
 import pkgdir.control.ControllerFileAdmin;
+import pkgdir.control.ControllerSQLAdmin;
 /**
 * Aplicacion de escritorio en java
 * Clase main del proyecto
@@ -24,6 +26,7 @@ public class CargarClase {
 	public static GuiMenu front;
 	public static GuiConfig frontConfig;
 	public static GuiFileAdmin frontFileAdmin;
+	public static GuiDatabase frontDatabase;
 
 	/**
 	*Metodo principal de la clase		
@@ -36,9 +39,11 @@ public class CargarClase {
 			front.showWin("JAVA BASICO");
 			frontConfig = new GuiConfig();
 			frontFileAdmin = new GuiFileAdmin( );
+			frontDatabase = new GuiDatabase( );
 			Controller controlador = new Controller( front );
 			ControllerConfig controlConf = new ControllerConfig( front, frontConfig );
 			ControllerFileAdmin controllerFileAdmin = new ControllerFileAdmin( front, frontFileAdmin );
+			ControllerSQLAdmin controllerSQLAdmin = new ControllerSQLAdmin( front, frontDatabase );
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -37,7 +37,29 @@ public class MysqlServices{
 		return objtemp;
 	}
 
-	public String[] getColumnsName( ResultSet rstmp){
+	public Object[] updateDataToMysql( String query ){
+		Object[] objtemp = new Object[2];
+		String stmp = "";
+		try{  
+			System.out.println("Actuakizando tablas: ");
+			Class.forName("com.mysql.cj.jdbc.Driver");  
+			Connection conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/almacen?useSSL=false","homzode","Mysqlpsql43*");  
+			Statement stmt=conn.createStatement();  
+			int rowsAfected =stmt.executeUpdate(query);
+			conn.close();  
+			objtemp[0] = new String[]{"Actualizado: ", "insert,update o delete"};
+			objtemp[1] = "Filas afectadas: ,"+rowsAfected+"\n";
+		}catch(java.sql.SQLSyntaxErrorException sqle){ 
+			System.out.println("ErrorSQL: "+ sqle.toString());
+			objtemp[0] = new String[]{"Error: ", "SQLSyntaxErrorException"};
+			objtemp[1] = "ErrorSql: ,"+query+"\n";
+		}catch(Exception e){ 
+			System.out.println("Error: "+ e.toString());
+		}
+		return objtemp;
+	}
+
+	private String[] getColumnsName( ResultSet rstmp){
 		String[] colNamesTmp = new String[ 1 ];
 		List<String> colNames = new ArrayList<String>();
 		try{

@@ -32,7 +32,7 @@ public class GuiMenu extends JFrame{
 	private JMenuItem itemDataBas;
 	private JMenuItem itemExit;
 	private JMenuItem itemCommand;
-	private JMenuItem itemEncrypt;
+	private JMenuItem itemDownloads;
 	private JMenuItem itemConfig;
 	private JButton butReadDb;
 	private JButton butDel;
@@ -89,8 +89,8 @@ public class GuiMenu extends JFrame{
 		menuTasks.add( itemDataBas );
 		itemCommand = new JMenuItem( "Comandos" );
 		menuTasks.add( itemCommand );
-		itemEncrypt = new JMenuItem( "Descargas" );
-		menuTasks.add( itemEncrypt );
+		itemDownloads = new JMenuItem( "Descargas" );
+		menuTasks.add( itemDownloads );
 		menuTasks.addSeparator();
 		itemExit = new JMenuItem( "Salir" );
 		menuTasks.add( itemExit );
@@ -99,42 +99,7 @@ public class GuiMenu extends JFrame{
 		return menuBar;
 	}
 	
-	/**
-	*Metodo que pinta el JButton butDel
-	*Retorna JButton
-	*/
-	private JButton drawButtonDel(){
-		try{
-		     URL url = GuiMenu.class.getResource("../../res/borrar_bl.png");
-		     BufferedImage img = ImageIO.read(url);
-			butDel = new JButton("Borrar Seleccion",new ImageIcon(img));
-			butDel.setBackground( new Color( 168, 168, 73, 50 ) );
-			butDel.setFont(butDel.getFont().deriveFont(Font.BOLD | Font.ITALIC));
-			butDel.setAlignmentX(panel.CENTER_ALIGNMENT);
-			butDel.setFocusPainted(true);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return butDel;
-	}
-	/**
-	*Metodo que pinta el JButton butReadDb
-	*Retorna JButton
-	*/
-	private JButton drawButtonReadDb(){
-		try{
-		     URL url = GuiMenu.class.getResource("../../res/read_bl.png");
-		     BufferedImage img = ImageIO.read(url);
-			butReadDb = new JButton("Ejecutar Query",new ImageIcon(img));
-			butReadDb.setBackground( new Color( 168, 168, 73, 50 ) );
-			butReadDb.setFont(butReadDb.getFont().deriveFont(Font.BOLD | Font.ITALIC));
-			butReadDb.setAlignmentX(panel.CENTER_ALIGNMENT);
-			butReadDb.setFocusPainted(true);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return butReadDb;
-	}
+
 	/**
 	*Metodo que pinta el JButton butCommand
 	*Retorna JButton
@@ -275,11 +240,11 @@ public class GuiMenu extends JFrame{
         return itemCommand;
     }
 	/**
-     * Devuelve el Item Encrypt
+     * Devuelve el Item Descargas
      * @return
      */
-    public JMenuItem getItemEncr() {
-        return itemEncrypt;
+    public JMenuItem getItemDownloads() {
+        return itemDownloads;
     }
 	/**
      * Devuelve el JMenu Configuracion
@@ -304,13 +269,6 @@ public class GuiMenu extends JFrame{
         return panelCommand;
     }
 
-	/**
-     * Devuelve el boton borrar Txt
-     * @return
-     */
-    public JButton getBotonDel() {
-        return butDel;
-    }
 	/**
      * Devuelve el boton comando
      * @return

@@ -6,6 +6,8 @@ import pkgdir.graficos.GuiDatabase;
 import pkgdir.modelo.MysqlServices;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.AdjustmentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.event.TableColumnModelEvent;
@@ -135,6 +137,25 @@ public class ControllerSQLAdmin implements ActionListener{
 				guiMenul.getMainJPanel().repaint();			
 			}
 		});	
+		
+		/*
+		* Agrega eventos sobre el JScrollPane
+		*/
+
+		AdjustmentListener adjustmentListener = new AdjustmentListener() {
+			@Override
+			public void adjustmentValueChanged(AdjustmentEvent e) {
+				guiMenul.getMainJPanel().revalidate();
+				guiMenul.getMainJPanel().repaint();			
+
+			}
+		};
+		guiDatabasel.getScrollTableRead( ).getVerticalScrollBar().addAdjustmentListener(adjustmentListener);
+        	guiDatabasel.getScrollTableRead( ).getHorizontalScrollBar().addAdjustmentListener(adjustmentListener);
+
+		/*
+		* Agrega eventos sobre el TextArea
+		*/
 		guiDatabasel.gettextAreaRead( ).addKeyListener(
 			new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {

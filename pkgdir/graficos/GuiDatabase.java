@@ -137,7 +137,8 @@ public class GuiDatabase extends JPanel{
 		try{
 			tableDb = new JTable( new DefaultTableModel() );
 			tableDb.setBackground( new Color( 168, 168, 73 ) );
-			scrollTableDb = new JScrollPane( tableDb );
+			tableDb.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			scrollTableDb = new JScrollPane( tableDb);
 			tableDb.setFont(new Font("Serif", Font.PLAIN, 14));
 			scrollTableDb.setPreferredSize(new Dimension(550, 300));
 			scrollTableDb.setMaximumSize(new Dimension(550, 300));

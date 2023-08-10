@@ -10,14 +10,18 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Component;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
+
 
 
 public class ControllerSQLAdmin implements ActionListener{
@@ -74,11 +78,21 @@ public class ControllerSQLAdmin implements ActionListener{
 			((DefaultTableModel)guiDatabasel.getTableRead( ).getModel()).setColumnCount(0);
 			for(int i = 0; i< ((String[])objtemp[0]).length; i++){
 				((DefaultTableModel)guiDatabasel.getTableRead( ).getModel()).addColumn( ((String[])objtemp[0])[i] );
-
 			}
 			for(int i = 0; i< dataRows.length; i++){
 				String[] dataCols = dataRows[i].split(",");
 				((DefaultTableModel)guiDatabasel.getTableRead( ).getModel()).addRow( dataCols );
+			}
+
+			TableColumnModel columnModel = guiDatabasel.getTableRead( ).getColumnModel();
+			for(int i = 0; i< ((String[])objtemp[0]).length; i++){
+				int width = 550/((String[])objtemp[0]).length;
+				for(int j = 0; j< dataRows.length; j++){
+					TableCellRenderer renderer = guiDatabasel.getTableRead( ).getCellRenderer(j, i);
+            			Component comp = guiDatabasel.getTableRead( ).prepareRenderer(renderer, j, i);
+            			width = Math.max(comp.getPreferredSize().width +1 , width);
+				}
+				columnModel.getColumn( i ).setPreferredWidth( width);					
 			}
 			guiMenul.getMainJPanel().revalidate();
 			guiMenul.getMainJPanel().repaint();

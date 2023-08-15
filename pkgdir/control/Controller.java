@@ -81,15 +81,6 @@ public class Controller implements ActionListener{
 			guiMenul.getMainJPanel().repaint();
 	   	}
 
-		/*
-		* Evento sobre item salir
-		*/
-		if( ae.getSource() == guiMenul.getItemDownloads()){
-			guiMenul.getMainJPanel().removeAll();
-			guiMenul.getMainJPanel().add(Box.createVerticalStrut(10));
-			guiMenul.getMainJPanel().revalidate();
-			guiMenul.getMainJPanel().repaint();
-	   	}
 	}
 
 	
@@ -98,7 +89,6 @@ public class Controller implements ActionListener{
      */
 	private void agregarEventos(){
 		guiMenul.getItemExit().addActionListener(this);
-		guiMenul.getItemDownloads().addActionListener(this);
 		guiMenul.getItemCommand().addActionListener(this);
 		guiMenul.getBotonCommand().addActionListener(this);
 

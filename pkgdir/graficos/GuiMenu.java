@@ -32,7 +32,7 @@ public class GuiMenu extends JFrame{
 	private JMenuItem itemDataBas;
 	private JMenuItem itemExit;
 	private JMenuItem itemCommand;
-	private JMenuItem itemDownloads;
+	private JMenuItem itemMedia;
 	private JMenuItem itemConfig;
 	private JButton butReadDb;
 	private JButton butDel;
@@ -89,8 +89,8 @@ public class GuiMenu extends JFrame{
 		menuTasks.add( itemDataBas );
 		itemCommand = new JMenuItem( "Comandos" );
 		menuTasks.add( itemCommand );
-		itemDownloads = new JMenuItem( "Descargas" );
-		menuTasks.add( itemDownloads );
+		itemMedia = new JMenuItem( "Multimedia" );
+		menuTasks.add( itemMedia );
 		menuTasks.addSeparator();
 		itemExit = new JMenuItem( "Salir" );
 		menuTasks.add( itemExit );
@@ -240,11 +240,11 @@ public class GuiMenu extends JFrame{
         return itemCommand;
     }
 	/**
-     * Devuelve el Item Descargas
+     * Devuelve el Item Media
      * @return
      */
-    public JMenuItem getItemDownloads() {
-        return itemDownloads;
+    public JMenuItem getItemMedia() {
+        return itemMedia;
     }
 	/**
      * Devuelve el JMenu Configuracion

@@ -16,12 +16,13 @@ import javax.swing.event.TableColumnModelListener;
 import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
-
+import javax.swing.text.Utilities;
 
 
 public class ControllerSQLAdmin implements ActionListener{
@@ -63,7 +64,8 @@ public class ControllerSQLAdmin implements ActionListener{
 		*/
 		if( ae.getSource() == guiDatabasel.getBotonReadDb()){
 			Object[] objtemp = new Object[2];
-			String stmp = (guiDatabasel.gettextAreaRead( ) ).getText();	
+//			String stmp = (guiDatabasel.gettextAreaRead( ) ).getText();	
+			String stmp = getLastLine( guiDatabasel.gettextAreaRead( ) );
 			mysqlServ = new MysqlServices();
 			if(  stmp.toLowerCase().contains("insert".toLowerCase()) ||
 				stmp.toLowerCase().contains("update".toLowerCase()) || 
@@ -181,7 +183,25 @@ public class ControllerSQLAdmin implements ActionListener{
 
 
 	}
-
+	
+/*
+	* Agrega eventos sobre el TextArea
+	*/
+	private String getLastLine( JTextArea textArea ){
+		String stmp = textArea.getText();
+		try{
+			int end = textArea.getDocument().getLength();
+			int start = Utilities.getRowStart( textArea, end );
+			while( start == end){
+				end--;
+				start = Utilities.getRowStart( textArea, end );
+			}
+			stmp = textArea.getText( start, end-start  );
+		}catch( Exception e){
+			e.printStackTrace();
+		}
+		return stmp;
+	}	
 
 
 

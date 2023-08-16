@@ -2,7 +2,7 @@
 * Aplicacion de escritorio en java
 * Clase main del proyecto
 * @author Homzode
-* @version 1.1.7, 2023/07/30
+* @version 1.3.0, 2023/08/15
 */
 
 package pkgdir;
@@ -21,7 +21,7 @@ import pkgdir.control.ControllerSQLAdmin;
 * Aplicacion de escritorio en java
 * Clase main del proyecto
 * @author Homzode
-* @version 1.1.7, 2023/07/30
+* @version 1.3.0, 2023/08/15
 */
 
 public class CargarClase {

@@ -184,8 +184,8 @@ public class ControllerSQLAdmin implements ActionListener{
 
 	}
 	
-/*
-	* Agrega eventos sobre el TextArea
+	/*
+	* Obtiene ultima linea del TextArea
 	*/
 	private String getLastLine( JTextArea textArea ){
 		String stmp = textArea.getText();

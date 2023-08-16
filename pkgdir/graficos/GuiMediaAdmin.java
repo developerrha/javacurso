@@ -17,17 +17,10 @@ public class GuiMediaAdmin extends JPanel{
 	
 	private JPanel panel;
 	private JPanel jtmpCb;
-	private JPanel jtmpCbFilesList;
 	private JFileChooser fileChTxt;
-	private JButton butReadTxt;
-	private JButton butWrite;
 	private JButton butBack;
-	private JTextArea areaRead;
-	private JScrollPane scrollRead;
 	private JLabel labFileName;
-	private JList<String> listSelFiles;
 	private JPanel drawMedia;
-
 	private OverlayLayout overlay;
 
 	/**
@@ -87,6 +80,7 @@ public class GuiMediaAdmin extends JPanel{
           UIManager.put("FileChooser.openButtonText","Seleccionar");
 		UIManager.put("FileChooser.openButtonToolTipText", "Seleccionar archivo o directorio");
           UIManager.put("FileChooser.cancelButtonToolTipText", "Cancelar exploracion");
+		//UIManager.put("FileView.directoryIcon", new ImageIcon(GuiMenu.class.getResource("../../res/back_bl.png")));
 		fileChTxt = new JFileChooser(".");
 		UIManager.put("FileChooser.readOnly", old);
 		fileChTxt.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -138,10 +132,10 @@ public class GuiMediaAdmin extends JPanel{
 		     URL url = GuiMenu.class.getResource("../../res/back_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butBack = new JButton("Regresar",new ImageIcon(img));
-			butBack.setBackground( new Color( 168, 168, 73, 30 ) );
+			butBack.setBackground( new Color( 168, 168, 73, 120 ) );
 			butBack.setFont(butBack.getFont().deriveFont(Font.BOLD | Font.ITALIC));
-			butBack.setAlignmentX(0.5f);
-		    	butBack.setAlignmentY(0.5f);    
+			butBack.setAlignmentX(0.1f);
+		    	butBack.setAlignmentY(0.9f);    
 			butBack.setFocusPainted(false);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -176,13 +170,6 @@ public class GuiMediaAdmin extends JPanel{
      */
     public JLabel getLabelFileName() {
         return labFileName;
-    }
-	/**
-     * Devuelve el boton escribir Txt
-     * @return
-     */
-    public JButton getBotonWrite() {
-        return butWrite;
     }
 	/**
      * Devuelve el boton Cancelar

@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.io.File;
 import java.nio.file.Files;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 public class ControllerMediaAdmin implements ActionListener{
@@ -60,12 +62,13 @@ public class ControllerMediaAdmin implements ActionListener{
 				if( ae.getActionCommand().equals("ApproveSelection") ){
 					File sel_file = guiMediaAdminl.getFileChooser().getSelectedFile();
 					String n_msource = sel_file.getParent()+"/"+sel_file.getName();
+					currentdir = sel_file.getParent();
+					System.out.println("currentdir: " + currentdir);
 					guiMediaAdminl.getLabelFileName().setText( n_msource );
 					guiMediaAdminl.getMediaContainer().setVisible(true);														
 					guiMediaAdminl.getButtonsJPanel().setVisible(true);
 					//Agrega el boton flotante sobre la multimedia
 					guiMenul.getMainJFrame().getContentPane().add( guiMediaAdminl.getButtonsJPanel() );
-
 					String mimeType = Files.probeContentType( sel_file.toPath() );					
 					System.out.println("mimeType: " + mimeType );
 					if( mimeType.equals( "image/jpeg" ) 
@@ -105,12 +108,6 @@ public class ControllerMediaAdmin implements ActionListener{
 			}
 	   	}
 		/*
-		* Evento sobre boton Escribir Txt
-		*/
-		if( ae.getSource() == guiMediaAdminl.getBotonWrite()){
-			String filePath = guiMediaAdminl.getLabelFileName().getText();
-	   	}
-		/*
 		* Evento sobre boton Cancelar
 		*/
 		if( ae.getSource() == guiMediaAdminl.getBotonBack() ){
@@ -119,6 +116,7 @@ public class ControllerMediaAdmin implements ActionListener{
 			guiMediaAdminl.getFileJPanel().removeAll();
 			guiMediaAdminl.showPanel();
 			agregarEventos();
+			guiMediaAdminl.getFileChooser().setCurrentDirectory( new File( currentdir ) );
 			guiMenul.getMainJPanel().revalidate();
 			guiMenul.getMainJPanel().repaint();
 	   	}
@@ -139,16 +137,27 @@ public class ControllerMediaAdmin implements ActionListener{
      */
 	private void agregarEventos(){
 		guiMenul.getItemMedia().addActionListener(this);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Multimedia", "mp4", "mkv", "avi","jpg","png","ogg","mp3");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Multimedia", "mp4", "mkv", "avi","jpg","png","ogg","mp3","wav");
           guiMediaAdminl.getFileChooser().setAcceptAllFileFilterUsed(false);
 		guiMediaAdminl.getFileChooser().addChoosableFileFilter(filter);
 		guiMediaAdminl.getFileChooser().addActionListener(this);
 		guiMediaAdminl.getBotonBack().addActionListener(this);
+		guiMediaAdminl.getFileChooser().addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
+				//if (JFileChooser.DIALOG_TITLE_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
+					System.out.println("CHANGE PROPERTY NOW");
+					guiMenul.getMainJPanel().revalidate();
+					guiMenul.getMainJPanel().repaint();
+			 	}
+			}
+        	});
 	}
 
-
-
-
+	/**
+     * Metodo que ajusta la imagen al JPanel conservando la proporcion
+     */
 	private int[] getResizeRatio( Dimension imgSize, Dimension boundary ){
 		int[] resizeData = new int[2];
 		try{

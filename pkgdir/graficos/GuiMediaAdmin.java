@@ -150,7 +150,7 @@ public class GuiMediaAdmin extends JPanel{
         return this;
     }
 	/**
-     * Devuelve el Botones salvar JPanel
+     * Devuelve el Botones retorno JPanel
      * @return Jpanel
      */
     public JPanel getButtonsJPanel() {

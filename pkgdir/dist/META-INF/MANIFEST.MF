@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Created-By: nombre
-Class-Path: . lib/mysql-connector-java-8.0.11.jar lib/zip4j-2.11.2.jar lib/commons-net-1.2.1.jar lib/jlayer-1.0.1.jar lib/vorbisspi-1.0.3.3.jar lib/tritonus-share-0.3.7.4.jar lib/gdx-backend-gwt.jar lib/mp3spi-1.9.5.4.jar
+Class-Path: . lib/mysql-connector-java-8.0.11.jar lib/zip4j-2.11.2.jar lib/commons-net-1.2.1.jar lib/jlayer-1.0.1.jar lib/vorbisspi-1.0.3.3.jar lib/tritonus-share-0.3.7.4.jar lib/gdx-backend-gwt.jar lib/mp3spi-1.9.5.4.jar lib/javafx-swing-11-linux.jar lib/javafx-graphics-11.0.1-linux.jar lib/javafx-base-11.0.1-linux.jar lib/javafx-web-11.0.1-linux.jar lib/javafx-controls-11.0.1-linux.jar lib/javafx-media-11.0.1-linux.jar
 Main-Class: pkgdir.CargarClase

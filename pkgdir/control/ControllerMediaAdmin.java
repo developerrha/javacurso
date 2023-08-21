@@ -6,7 +6,9 @@ import pkgdir.graficos.GuiMediaAdmin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Image;
+//import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.Box;
@@ -14,6 +16,9 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 import java.io.File;
 import java.nio.file.Files;
 import java.beans.PropertyChangeListener;
@@ -25,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.awt.Desktop;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
@@ -38,6 +44,18 @@ import javax.sound.sampled.Clip;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 
+import javafx.scene.web.WebView;
+import javafx.scene.web.WebEngine;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.Scene;
+import javafx.geometry.Orientation;
+import javafx.geometry.Insets;
+import javafx.scene.paint.Color;
+
+
 public class ControllerMediaAdmin implements ActionListener{
 
 	private int BUFFER_SIZE = 128000;
@@ -49,6 +67,13 @@ public class ControllerMediaAdmin implements ActionListener{
 	private AudioFormat baseFormat;
 	private Clip clip;
 	private Sequencer sequencer;
+
+	private WebView webComponent;
+	private JFXPanel javafxPanel;
+	private JPanel temp;
+	private StackPane webPane;
+	private URL url;
+
 
 	/**
      * Constructor sin parametros
@@ -68,7 +93,7 @@ public class ControllerMediaAdmin implements ActionListener{
 		this.guiMediaAdminl = guiMediaAdmin;
 		guiMediaAdminl.showPanel();
 		agregarEventos();
-	}
+}
 
 	/**
      * Metodo que administra los eventos sobre los componentes
@@ -112,6 +137,9 @@ public class ControllerMediaAdmin implements ActionListener{
 						|| mimeType.equals( "video/x-matroska" )
 						|| mimeType.equals( "video/x-msvideo"  ) ){
 							System.out.println("Soy un video." );
+						javafxPanel = new JFXPanel();
+						loadJavaFXScene();
+						guiMediaAdminl.getMediaContainer().add(  temp  );
 					}else if( mimeType.equals( "audio/mpeg" ) 
 						|| mimeType.equals( "audio/x-vorbis+ogg" )
 						|| mimeType.equals( "audio/ogg" )
@@ -215,7 +243,9 @@ public class ControllerMediaAdmin implements ActionListener{
 		}
 		return resizeData;
 	}
-
+	/**
+     * Metodo que reproduce archivos de sonido
+     */
 	private void playSound( String mimeType, String pathm ){
 		try{
 			switch (mimeType) {
@@ -278,6 +308,41 @@ public class ControllerMediaAdmin implements ActionListener{
 			
 		}catch( Exception e){
 			System.out.println( e.toString() );
+		}	
+	}
+	/**
+     * Metodo que carga html en webview para play videos
+     */
+
+	private void loadJavaFXScene(){
+		try{
+		 	temp = new JPanel();
+			temp.setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0) );
+			temp.setPreferredSize(new Dimension(700, 450) );
+			webPane = new StackPane();
+			url = GuiMenu.class.getResource("../../res/video.html");
+			System.out.println("url: "+url.toString() );
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					try{
+						webComponent = new WebView();
+						WebEngine engine = webComponent.getEngine();
+						//engine.load( url.toString() );
+						engine.load( "https://www.google.com" );
+						webPane.getChildren().add(webComponent);
+						Scene scene = new Scene(webPane, 690, 400, javafx.scene.paint.Color.BLUE);
+						javafxPanel.setScene(scene);
+					}catch( Exception e){
+						e.printStackTrace();
+					}	
+				}
+			});
+			temp.add( javafxPanel );
+			guiMediaAdminl.getBotonBack().setAlignmentY(0.99f);
+			guiMenul.getMainJFrame().getContentPane().add( guiMediaAdminl.getButtonsJPanel() );
+		}catch( Exception e){
+			e.printStackTrace();
 		}	
 	}
 

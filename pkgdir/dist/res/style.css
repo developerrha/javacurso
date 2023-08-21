@@ -1,0 +1,91 @@
+html {
+  box-sizing: border-box;
+  background-color: transparent;
+
+}
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+}
+div{
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+video{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: fill;
+  /*object-fit: cover;*/
+}
+
+/* Video properties controls table hide*/
+.vjs-hidden {
+  display: none !important;
+}
+/* Big play button hide*/
+.vjs-controls-disabled .vjs-big-play-button,
+.vjs-has-started .vjs-big-play-button,
+.vjs-using-native-controls .vjs-big-play-button{
+/*.vjs-error .vjs-big-play-button {*/
+  display: none;
+}
+.vjs-text-track-display {
+  display: none;
+  pointer-events: none;
+}
+.vjs-controls-disabled .vjs-control-bar,
+.vjs-using-native-controls .vjs-control-bar{
+/*.vjs-error .vjs-control-bar {*/
+  display: none !important;
+}
+
+/* Error message signal X */
+.vjs-error .vjs-error-display .vjs-modal-dialog-content {
+  font-size: 1.1em;
+  text-align: center;
+  top: 50%;
+  left: 5%;
+  width: 70%;
+}
+
+.vjs-error .vjs-error-display:before {
+  color: #fff;
+  content: "Fallo";
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2em;
+  left: 0;
+  line-height: 1;
+  margin-top: -0.5em;
+  position: absolute;
+  text-shadow: 0.05em 0.05em 0.1em #000;
+  text-align: center;
+  top: 40%;
+  vertical-align: middle;
+  width: 80%;
+}
+/*progress bar*/
+.vjs-loading-spinner {
+  display: none;
+  visibility: hide;
+}
+
+
+
+}
+
+
+
+
+
+
+
+

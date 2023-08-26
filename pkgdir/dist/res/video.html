@@ -2,10 +2,34 @@
 <html>
   <head>
  	<link href="style.css" rel="stylesheet">
+
   </head>
   <body>
-    <video autoplay >
-      <source src="/datos/laboratorio/java_mio/media_store/stressed.mp4" type=video/mp4>
-    </video>
+	<input type="hidden" id="url" value="" >	
+	<script>
+		var url_3 =  window.location.href;
+		var tmp = url_3.split("?");
+		var source = document.getElementById('url');
+		source.value = tmp[1];
+	</script>
+	
+	<div id="cont">
+		<video autoplay id="video"  preload="none" controls >
+		</video>
+	</div>
+	<script src='jquery.min.js'></script>
+        <!--<script  src="./script.js"></script> -->
+        <script>
+            $(document).ready(function() {
+              $("#video").html("<source src='"+ $("#url").val() +"' type='video/mp4'>");
+			var vid = $("#video")[0];
+			vid.addEventListener('loadedmetadata', function() {
+				var duracion = vid.duration;
+    			});
+            });
+		function letout() {
+		    alert("Go out");
+		} 
+        </script>
   </body>
 </html>

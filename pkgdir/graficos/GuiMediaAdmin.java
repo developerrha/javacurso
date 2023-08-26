@@ -63,6 +63,7 @@ public class GuiMediaAdmin extends JPanel{
 			OverlayLayout overlay = new OverlayLayout( jtmpCb );
 			jtmpCb.setLayout(overlay);
 			jtmpCb.add(drawButtonBack());
+			jtmpCb.setBackground( Color.BLUE );
 			jtmpCb.setVisible(false);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -98,6 +99,7 @@ public class GuiMediaAdmin extends JPanel{
 			drawMedia.setLayout(new FlowLayout( FlowLayout.CENTER, 0, 0) );
 			drawMedia.setPreferredSize(new Dimension(700, 450));
 			drawMedia.setMaximumSize(new Dimension(700, 450));
+			drawMedia.setBackground( Color.RED );
 			drawMedia.setOpaque(false);
 			drawMedia.setVisible(false);
 		}catch(Exception e){
@@ -116,6 +118,7 @@ public class GuiMediaAdmin extends JPanel{
 			labFileName.setBackground( new Color( 168, 168, 73, 50 ) );
 			labFileName.setFont(labFileName.getFont().deriveFont(Font.BOLD | Font.ITALIC));
 			labFileName.setAlignmentX(panel.CENTER_ALIGNMENT);
+			labFileName.setOpaque(true);
 			labFileName.setVisible(false);
 		}catch(Exception e){
 			e.printStackTrace();

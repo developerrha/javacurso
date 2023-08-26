@@ -18,7 +18,7 @@ div{
     background-color: transparent;
 }
 video{
-  position: fixed;
+  /*position: fixed;*/
   top: 0;
   left: 0;
   width: 100vw;
@@ -78,7 +78,31 @@ video{
   visibility: hide;
 }
 
+.roundbutton {
+	background-color: #666;
+	border-radius: 50%;
+	color: #fff;
+	background-color: rgba(168,168,73,0.7);
+	display: block;
+	font-size: 12px;
+	width: 12%;
+	margin: 0 auto;
+	padding: 8px 16px;
+	position: absolute;
+	left: 2%;
+	top: 7%;
+}
+button.active {
+  background-color: #0077a2;
+}
 
+a {
+  	color: white;
+	display: block;
+	position: absolute;
+	left: 2%;
+	top: 7%;
+}
 
 }
 

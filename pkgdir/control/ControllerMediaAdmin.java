@@ -3,10 +3,11 @@ package pkgdir.control;
 
 import pkgdir.graficos.GuiMenu;
 import pkgdir.graficos.GuiMediaAdmin;
+import pkgdir.modelo.ServicePlayVideo;
+import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Image;
-//import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Component;
 import javax.swing.JLabel;
@@ -15,8 +16,10 @@ import javax.swing.Box;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JRootPane;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.io.File;
@@ -32,6 +35,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.awt.Desktop;
 
+
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import javazoom.spi.vorbis.sampled.file.VorbisAudioFileReader;
@@ -44,36 +48,22 @@ import javax.sound.sampled.Clip;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 
-import javafx.scene.web.WebView;
-import javafx.scene.web.WebEngine;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.Scene;
-import javafx.geometry.Orientation;
-import javafx.geometry.Insets;
-import javafx.scene.paint.Color;
-
-
 public class ControllerMediaAdmin implements ActionListener{
 
 	private int BUFFER_SIZE = 128000;
 	private GuiMenu guiMenul;
 	public GuiMediaAdmin guiMediaAdminl;
+	private ServicePlayVideo servicePlayVideo;
 	private File[] sel_files;
 	private String currentdir;		
 	private AudioInputStream in;	
 	private AudioFormat baseFormat;
 	private Clip clip;
 	private Sequencer sequencer;
+	private String n_msource;
+	private Process p_streaming;
 
-	private WebView webComponent;
-	private JFXPanel javafxPanel;
-	private JPanel temp;
-	private StackPane webPane;
-	private URL url;
-
+	
 
 	/**
      * Constructor sin parametros
@@ -109,7 +99,7 @@ public class ControllerMediaAdmin implements ActionListener{
 			try{
 				if( ae.getActionCommand().equals("ApproveSelection") ){
 					File sel_file = guiMediaAdminl.getFileChooser().getSelectedFile();
-					String n_msource = sel_file.getParent()+"/"+sel_file.getName();
+					n_msource = sel_file.getParent()+"/"+sel_file.getName();
 					currentdir = sel_file.getParent();
 					System.out.println("currentdir: " + currentdir+" n_msource: "+n_msource);
 					guiMediaAdminl.getLabelFileName().setText( n_msource );
@@ -133,13 +123,28 @@ public class ControllerMediaAdmin implements ActionListener{
 						Image newImg = img.getScaledInstance( newSize[0], newSize[1], Image.SCALE_SMOOTH);
 						ImageIcon newImc = new ImageIcon(newImg);
 						guiMediaAdminl.getMediaContainer().add( new JLabel( newImc ) );
+						guiMediaAdminl.getLabelFileName().setVisible(true);	
+						guiMediaAdminl.getFileJPanel().setVisible(true);
+						guiMediaAdminl.getFileChooser().setVisible(false);	
 					}else if( mimeType.equals( "video/mp4" ) 
 						|| mimeType.equals( "video/x-matroska" )
 						|| mimeType.equals( "video/x-msvideo"  ) ){
-							System.out.println("Soy un video." );
-						javafxPanel = new JFXPanel();
-						loadJavaFXScene();
-						guiMediaAdminl.getMediaContainer().add(  temp  );
+							System.out.println("Soy un video. java -classpath java_clases.jar pkgdir.control.ServicePlayVideo" );
+							guiMediaAdminl.getButtonsJPanel().setVisible(false);
+							guiMediaAdminl.getMediaContainer().setVisible(false);
+							guiMediaAdminl.getLabelFileName().setVisible(false);	
+
+							String cmd_preview_str = "java -classpath java_clases.jar pkgdir.modelo.ServicePlayVideo "+n_msource;
+					          System.out.println("preview_spo_cmd_preview_str= "+cmd_preview_str);
+					          p_streaming = Runtime.getRuntime().exec(cmd_preview_str);
+							Scanner sc_rtm = new Scanner(p_streaming.getInputStream());
+							while (sc_rtm.hasNextLine()) {
+								String line = sc_rtm.nextLine();
+								System.out.println ("line: "+line);
+							} 
+
+
+//							guiMediaAdminl.getFileChooser().setVisible(false);	
 					}else if( mimeType.equals( "audio/mpeg" ) 
 						|| mimeType.equals( "audio/x-vorbis+ogg" )
 						|| mimeType.equals( "audio/ogg" )
@@ -147,13 +152,17 @@ public class ControllerMediaAdmin implements ActionListener{
 						|| mimeType.equals( "audio/midi" )  ){
 							System.out.println("Soy un audio: "+mimeType );
 						playSound( mimeType, n_msource );
+						guiMediaAdminl.getLabelFileName().setVisible(true);	
+						guiMediaAdminl.getFileJPanel().setVisible(true);
+						guiMediaAdminl.getFileChooser().setVisible(false);	
 					}else{
 						System.out.println("Un desconocido." );
-					}						
-					guiMediaAdminl.getLabelFileName().setVisible(true);	
-					guiMediaAdminl.getFileChooser().setVisible(false);	
-					guiMenul.getMainJPanel().revalidate();
-					guiMenul.getMainJPanel().repaint();
+					}					
+					System.out.println("Im after ifs");	
+					//guiMediaAdminl.getLabelFileName().setVisible(true);	
+					//guiMediaAdminl.getFileChooser().setVisible(false);	
+					guiMenul.getMainJFrame().revalidate();
+					guiMenul.getMainJFrame().repaint();
 				}else{
 					System.out.println("Seleccion de archivo cancelada");
 					return;
@@ -172,15 +181,16 @@ public class ControllerMediaAdmin implements ActionListener{
 			if( sequencer != null ){
 				sequencer.stop();
 			}
+			System.out.println("To stop thread." );
+
 			//Remueve el boton flotante sobre la multimedia
 			guiMenul.getMainJFrame().getContentPane().remove( guiMediaAdminl.getButtonsJPanel() );
 			guiMediaAdminl.getFileJPanel().removeAll();
 			guiMediaAdminl.showPanel();
 			agregarEventos();
 			guiMediaAdminl.getFileChooser().setCurrentDirectory( new File( currentdir ) );
-			guiMenul.getMainJPanel().revalidate();
-			guiMenul.getMainJPanel().repaint();
-	   	}
+			guiMenul.getMainJFrame().revalidate();
+			guiMenul.getMainJFrame().repaint();	   	}
 		/*
 		* Evento sobre MenuItem Media
 		*/
@@ -310,40 +320,10 @@ public class ControllerMediaAdmin implements ActionListener{
 			System.out.println( e.toString() );
 		}	
 	}
-	/**
-     * Metodo que carga html en webview para play videos
-     */
 
-	private void loadJavaFXScene(){
-		try{
-		 	temp = new JPanel();
-			temp.setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0) );
-			temp.setPreferredSize(new Dimension(700, 450) );
-			webPane = new StackPane();
-			url = GuiMenu.class.getResource("../../res/video.html");
-			System.out.println("url: "+url.toString() );
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					try{
-						webComponent = new WebView();
-						WebEngine engine = webComponent.getEngine();
-						//engine.load( url.toString() );
-						engine.load( "https://www.google.com" );
-						webPane.getChildren().add(webComponent);
-						Scene scene = new Scene(webPane, 690, 400, javafx.scene.paint.Color.BLUE);
-						javafxPanel.setScene(scene);
-					}catch( Exception e){
-						e.printStackTrace();
-					}	
-				}
-			});
-			temp.add( javafxPanel );
-			guiMediaAdminl.getBotonBack().setAlignmentY(0.99f);
-			guiMenul.getMainJFrame().getContentPane().add( guiMediaAdminl.getButtonsJPanel() );
-		}catch( Exception e){
-			e.printStackTrace();
-		}	
+	public synchronized String getPathFileSelected(){
+		System.out.println( "To send n_msource: "+n_msource );
+		return "Value build for me";
 	}
 
 }

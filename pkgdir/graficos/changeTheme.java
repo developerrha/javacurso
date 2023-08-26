@@ -7,7 +7,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 
 //Theme Class to Change the default color to green color
-class changeTheme extends DefaultMetalTheme {
+public class changeTheme extends DefaultMetalTheme {
     public ColorUIResource getWindowTitleInactiveBackground() {
       return new ColorUIResource( new Color( 146, 168, 73, 50) );
     }

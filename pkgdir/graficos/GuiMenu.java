@@ -66,7 +66,7 @@ public class GuiMenu extends JFrame{
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.getContentPane().add(drawPanel());
 			this.setJMenuBar( drawMenuBar() );
-			this.setIconImage( new ImageIcon( GuiMenu.class.getResource( "../../res/img_icon_litle.jpg" ) ).getImage()  );
+			this.setIconImage( new ImageIcon( getClass().getResource( "/res/img_icon_litle.jpg" ) ).getImage() ); 
 			this.setVisible(true);
 			drawPanCommand();
 		}catch(Exception e){
@@ -106,7 +106,7 @@ public class GuiMenu extends JFrame{
 	*/
 	private JButton drawButtonCommand(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/run_bl.png");
+		     URL url = getClass().getResource("/res/run_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butCommand = new JButton("Ejecutar Comando",new ImageIcon(img));
 			butCommand.setBackground( new Color( 168, 168, 73, 50 ) );

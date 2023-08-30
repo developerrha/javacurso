@@ -11,35 +11,23 @@ import java.awt.Font;
 import java.awt.Dimension;
 import javax.imageio.ImageIO;
 import java.net.URL;
-import java.awt.Component;
-import java.awt.Toolkit;
 import java.awt.BorderLayout;
-import javax.swing.plaf.ColorUIResource;
-import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
-
-import javafx.application.Application;
 import javafx.scene.web.WebView;
 import javafx.scene.web.WebEngine;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Scene;
-import javafx.stage.Window;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.scene.web.WebEvent;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.events.EventListener;
-import javafx.application.Platform;
+
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
+import java.io.File;
+
 
 //public class ServicePlayVideo extends JDesktopPane {
 public class ServicePlayVideo extends JPanel{
@@ -60,7 +48,6 @@ public class ServicePlayVideo extends JPanel{
 	private static GuiMediaAdmin guiMediaAdminl;
 
 	public static void main(String[] args){  
-		System.out.println("Service.args: "+ args[0] );
 		n_msource = args[0];	
 		SwingUtilities.invokeLater(new Runnable() {  
             @Override
@@ -77,6 +64,9 @@ public class ServicePlayVideo extends JPanel{
 	*/
 	public ServicePlayVideo( ) {
 		try{
+			baseVideo.setIconImage( new ImageIcon( getClass().getResource( "/res/img_icon_litle.jpg" ) ).getImage()  );
+			baseVideo.revalidate();
+			baseVideo.repaint();
 			javafxPanel = new JFXPanel();
 			add(javafxPanel, BorderLayout.CENTER);
 			setBackground( new Color( 146, 168, 73, 50) );
@@ -106,7 +96,6 @@ public class ServicePlayVideo extends JPanel{
 			baseVideo.setLocationRelativeTo( null );
 			baseVideo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			baseVideo.setTitle( n_msource );
-			baseVideo.setIconImage( new ImageIcon( GuiMenu.class.getResource( "../../res/img_icon_litle.jpg" ) ).getImage()  );
 			baseVideo.setBackground( new Color( 146, 168, 73, 50) );
 			baseVideo.setVisible(true);
 		}catch(Exception e){
@@ -122,30 +111,23 @@ public class ServicePlayVideo extends JPanel{
 	private void loadJavaFXScene(){
 		try{
 			webPane = new StackPane();
-			url = GuiMenu.class.getResource("../../res/video.html");
+			url = getClass().getResource("/video.html");
 			String vidUrl = url.toString() + "?"+n_msource;
 			System.out.println("vidUrl: "+ vidUrl );
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
 					try{
-						System.out.println("Runing ");
 						webComponent = new WebView();
 						WebEngine engine = webComponent.getEngine();
-
-						engine.setOnAlert(new EventHandler<WebEvent<String>>(){
-							@Override
-							public void handle(WebEvent<String> arg0) {      
-								try{      
-									System.out.println("Hay un alert en la pagina: "+arg0.getData()); 
-									fxThread = Thread.currentThread();
-								}catch( Exception e ){
-									System.out.println("On alert Error..");
-									e.printStackTrace();
-								}	
+						engine.getLoadWorker().stateProperty().addListener(
+						(ObservableValue<? extends State> ov, State oldState, State newState) -> {
+							System.out.println("newState: "+newState+" State.SUCCEEDED: "+State.SUCCEEDED);
+							if (newState == State.SUCCEEDED) {
+							//	engine.executeScript("letout('"+n_msource+"');");
 							}
 						});
-
+						engine.setOnAlert(event -> System.out.println(event.toString()));
 						engine.load( vidUrl );
 						webPane.getChildren().add(webComponent);
 						scene = new Scene(webPane, 800, 500, javafx.scene.paint.Color.BLUE);
@@ -157,10 +139,8 @@ public class ServicePlayVideo extends JPanel{
 					}	
 				}
 			});
-			//baseVideo.add( javafxPanel );
-			System.out.println("Out of thread ");
 		}catch( Exception e){
-			System.out.println("On Method..");
+			System.out.println("On Method.."+e.toString());
 			e.printStackTrace();
 		}	
 	}

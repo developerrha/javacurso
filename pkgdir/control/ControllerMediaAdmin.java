@@ -34,8 +34,6 @@ import java.net.URL;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.awt.Desktop;
-
-
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import javazoom.spi.vorbis.sampled.file.VorbisAudioFileReader;
@@ -47,6 +45,9 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.Clip;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
+
+import javax.media.Manager;
+//import javax.media.Player;
 
 public class ControllerMediaAdmin implements ActionListener{
 
@@ -99,6 +100,7 @@ public class ControllerMediaAdmin implements ActionListener{
 			try{
 				if( ae.getActionCommand().equals("ApproveSelection") ){
 					File sel_file = guiMediaAdminl.getFileChooser().getSelectedFile();
+					URL upath = sel_file.toURI().toURL();
 					n_msource = sel_file.getParent()+"/"+sel_file.getName();
 					currentdir = sel_file.getParent();
 					System.out.println("currentdir: " + currentdir+" n_msource: "+n_msource);
@@ -128,23 +130,16 @@ public class ControllerMediaAdmin implements ActionListener{
 						guiMediaAdminl.getFileChooser().setVisible(false);	
 					}else if( mimeType.equals( "video/mp4" ) 
 						|| mimeType.equals( "video/x-matroska" )
-						|| mimeType.equals( "video/x-msvideo"  ) ){
-							System.out.println("Soy un video. java -classpath java_clases.jar pkgdir.control.ServicePlayVideo" );
-							guiMediaAdminl.getButtonsJPanel().setVisible(false);
-							guiMediaAdminl.getMediaContainer().setVisible(false);
-							guiMediaAdminl.getLabelFileName().setVisible(false);	
-
-							String cmd_preview_str = "java -classpath java_clases.jar pkgdir.modelo.ServicePlayVideo "+n_msource;
-					          System.out.println("preview_spo_cmd_preview_str= "+cmd_preview_str);
-					          p_streaming = Runtime.getRuntime().exec(cmd_preview_str);
-							Scanner sc_rtm = new Scanner(p_streaming.getInputStream());
-							while (sc_rtm.hasNextLine()) {
-								String line = sc_rtm.nextLine();
-								System.out.println ("line: "+line);
-							} 
-
-
-//							guiMediaAdminl.getFileChooser().setVisible(false);	
+						|| mimeType.equals( "video/x-msvideo" )
+						|| mimeType.equals( "application/x-troff-msvideo" )
+						|| mimeType.equals( "video/x-matroska" )
+						|| mimeType.equals( "video/mpeg" )	 ){
+							System.out.println("Soy un video." );
+						if( mimeType.equals( "application/x-troff-msvideo" )
+							|| mimeType.equals( "video/x-matroska" )
+							|| mimeType.equals( "video/mpeg" ) )
+							mimeType = "video/x-msvideo";
+						playVideo( mimeType, upath );
 					}else if( mimeType.equals( "audio/mpeg" ) 
 						|| mimeType.equals( "audio/x-vorbis+ogg" )
 						|| mimeType.equals( "audio/ogg" )
@@ -208,7 +203,7 @@ public class ControllerMediaAdmin implements ActionListener{
      */
 	private void agregarEventos(){
 		guiMenul.getItemMedia().addActionListener(this);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Multimedia", "mp4", "mkv", "avi","jpg","jpeg","png","ogg","mp3","wav","mid");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Multimedia", "mp4", "mkv", "avi","mpeg","jpg","jpeg","png","ogg","mp3","wav","mid");
           guiMediaAdminl.getFileChooser().setAcceptAllFileFilterUsed(false);
 		guiMediaAdminl.getFileChooser().addChoosableFileFilter(filter);
 		guiMediaAdminl.getFileChooser().addActionListener(this);
@@ -253,6 +248,47 @@ public class ControllerMediaAdmin implements ActionListener{
 		}
 		return resizeData;
 	}
+
+	private void playVideo( String mimeType, URL upath ){
+		try{
+			switch (mimeType) {
+				case "video/mp4":
+					guiMediaAdminl.getButtonsJPanel().setVisible(false);
+					guiMediaAdminl.getMediaContainer().setVisible(false);
+					guiMediaAdminl.getLabelFileName().setVisible(false);	
+					String cmd_preview_str = "java -classpath java_clases.jar pkgdir.modelo.ServicePlayVideo "+n_msource;
+					System.out.println("preview_spo_cmd_preview_str= "+cmd_preview_str);
+					p_streaming = Runtime.getRuntime().exec(cmd_preview_str);
+					Scanner sc_rtm = new Scanner(p_streaming.getInputStream());
+					while (sc_rtm.hasNextLine()) {
+						String line = sc_rtm.nextLine();
+						System.out.println ("line: "+line);
+					} 
+				break;
+				case "video/x-msvideo":
+					guiMediaAdminl.getButtonsJPanel().setVisible(false);
+					guiMediaAdminl.getMediaContainer().setVisible(false);
+					guiMediaAdminl.getLabelFileName().setVisible(false);
+					String vidUrl = "videoplayer_0.py "+n_msource;
+					System.out.println("vidUrl: "+ vidUrl );
+					String cmd_prevpy_str = "python3.9 " + vidUrl;	
+					//String cmd_prevpy_str = "python3.9 /datos/laboratorio/python_3/curso/playvideo/videoplayer_0.py /datos/laboratorio/python_3/curso/media_store/world_higth.avi";
+					System.out.println("***preview_spo_cmd_preview_str= "+cmd_prevpy_str);
+					p_streaming = Runtime.getRuntime().exec(cmd_prevpy_str);
+					Scanner sc_py = new Scanner(p_streaming.getInputStream());
+					while (sc_py.hasNextLine()) {
+						String line = sc_py.nextLine();
+						System.out.println ("line: "+line);
+					} 
+				break;
+			}
+
+		}catch( Exception e ){
+			e.printStackTrace();
+		}
+	}
+
+
 	/**
      * Metodo que reproduce archivos de sonido
      */

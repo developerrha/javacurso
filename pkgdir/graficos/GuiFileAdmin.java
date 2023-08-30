@@ -172,7 +172,7 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonReadTxt(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/write_bl.png");
+		     URL url = getClass().getResource("/res/write_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butReadTxt = new JButton("Editar Archivo",new ImageIcon(img));
 			butReadTxt.setBackground( new Color( 168, 168, 73, 50 ) );
@@ -191,7 +191,7 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonWrite(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/save_bl.png");
+		     URL url = getClass().getResource("/res/save_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butWrite = new JButton("Guardar cambios",new ImageIcon(img));
 			butWrite.setBackground( new Color( 168, 168, 73, 30 ) );
@@ -210,7 +210,7 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonEncript(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/encrypt_bl.png");
+		     URL url = getClass().getResource("/res/encrypt_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butEncript = new JButton("Encriptar archivo",new ImageIcon(img));
 			butEncript.setBackground( new Color( 168, 168, 73, 30 ) );
@@ -229,7 +229,7 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonZipFiles(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/zip_bl.png");
+		     URL url = getClass().getResource("/res/zip_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butZipFile = new JButton("Crear Zip",new ImageIcon(img));
 			butZipFile.setBackground( new Color( 168, 168, 73, 30 ) );
@@ -248,7 +248,7 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonSendFtp(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/ftp_bl.png");
+		     URL url = getClass().getResource("/res/ftp_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butSendFtp = new JButton("Enviar a FTP",new ImageIcon(img));
 			butSendFtp.setBackground( new Color( 168, 168, 73, 30 ) );
@@ -267,7 +267,7 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonCancel(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/cancel_bl.png");
+		     URL url = getClass().getResource("/res/cancel_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butCancel = new JButton("Cancelar",new ImageIcon(img));
 			butCancel.setBackground( new Color( 168, 168, 73, 30 ) );
@@ -286,7 +286,7 @@ public class GuiFileAdmin extends JPanel{
 	*/
 	private JButton drawButtonCancelZip(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/cancel_bl.png");
+		     URL url = getClass().getResource("/res/cancel_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butCancelzip= new JButton("Cancelar",new ImageIcon(img));
 			butCancelzip.setBackground( new Color( 168, 168, 73, 30 ) );

@@ -93,7 +93,7 @@ public class GuiDatabase extends JPanel{
 	*/
 	private JButton drawButtonReadDb(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/read_bl.png");
+		     URL url = getClass().getResource("/res/read_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butReadDb = new JButton("Ejecutar Query",new ImageIcon(img));
 			butReadDb.setBackground( new Color( 168, 168, 73, 50 ) );
@@ -155,7 +155,7 @@ public class GuiDatabase extends JPanel{
 	*/
 	private JButton drawButtonCancel(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/cancel_bl.png");
+		     URL url = getClass().getResource("/res/cancel_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butCancel = new JButton("Cancelar",new ImageIcon(img));
 			butCancel.setBackground( new Color( 168, 168, 73, 30 ) );

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+ 	<link href="style.css" rel="stylesheet">
+
+  </head>
+  <body>
+	<input type="hidden" id="url" value="" >	
+	
+	
+	<div id="cont">
+		<video autoplay id="video"  preload="none" controls >
+		</video>
+	</div>
+	
+        <!--<script  src="./script.js"></script> -->
+		<script src='jquery.min.js'></script>
+        <script>
+		function letout( mypath ) {
+			alert("Llego");
+          	$(document).ready(function() {
+              		$("#video").html("<source src='"+ mypath +"' type='video/mp4'>");
+				var vid = $("#video")[0];
+				alert(vid.innerHTML);
+            	});
+		} 
+        </script>
+  </body>
+</html>

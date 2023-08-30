@@ -132,7 +132,7 @@ public class GuiMediaAdmin extends JPanel{
 	*/
 	private JButton drawButtonBack(){
 		try{
-		     URL url = GuiMenu.class.getResource("../../res/back_bl.png");
+		     URL url = getClass().getResource("/res/back_bl.png");
 		     BufferedImage img = ImageIO.read(url);
 			butBack = new JButton("Regresar",new ImageIcon(img));
 			butBack.setBackground( new Color( 168, 168, 73, 120 ) );
